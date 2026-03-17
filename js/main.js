@@ -1,12 +1,33 @@
 /**
  * Extreme Developer Portfolio - Main JavaScript
- * GSAP ScrollTrigger for section animations (native scroll)
+ * GSAP ScrollTrigger + Lenis smooth scroll
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+async function init() {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   gsap.registerPlugin(ScrollTrigger);
+
+  // ========== Lenis smooth scroll + GSAP ScrollTrigger integration ==========
+  let Lenis = null;
+  try {
+    const mod = await import('https://unpkg.com/lenis@1.3.18/dist/lenis.mjs');
+    Lenis = mod.default;
+  } catch {
+    Lenis = null;
+  }
+
+  let lenis;
+  if (Lenis && !prefersReducedMotion) {
+    lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
 
   // ========== Language, Theme & Brightness (load saved prefs first) ==========
   const savedLang = localStorage.getItem('portfolio-lang') || 'en';
@@ -66,20 +87,22 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
 
-    // Projects - SaaS, Client Websites, Research & Academic
+    // Projects - Categorized grids (SaaS, Websites, Research)
     const saasGrid = document.getElementById('projects-saas');
     const websitesGrid = document.getElementById('projects-websites');
     const researchGrid = document.getElementById('projects-research');
     if (data.projects) {
-      const renderProjectCard = (id, proj, projectMeta) => {
+      const renderProjectCard = (id, proj, projectMeta, index) => {
         const hintI18n = projectMeta.url ? 'projects.visitHint' : 'projects.clickHint';
         const previewUrl = projectMeta.preview || (projectMeta.url ? `https://s0.wp.com/mshots/v1/${encodeURIComponent(projectMeta.url)}?w=600` : null);
         const previewHtml = projectMeta.type === 'websites' && previewUrl
           ? `<div class="project-preview-wrap"><img class="project-preview" src="${previewUrl}" alt="${proj.title}" loading="lazy" onerror="this.style.display='none'"></div>`
           : '';
         const badge = projectMeta.type === 'websites' ? '<span class="project-badge" data-i18n="projects.websiteBadge">Website</span>' : (projectMeta.type === 'research' ? '<span class="project-badge" data-i18n="projects.researchBadge">Research</span>' : (projectMeta.type === 'saas' ? '<span class="project-badge" data-i18n="projects.saasBadge">Web App</span>' : ''));
+        const num = String(index + 1).padStart(2, '0');
         return `
           <article class="project-card ${projectMeta.type === 'websites' ? 'project-card-website' : ''} ${projectMeta.type === 'research' ? 'project-card-research' : ''} ${projectMeta.type === 'saas' ? 'project-card-saas' : ''}" data-animate data-project="${id}">
+            <span class="project-card-num" aria-hidden="true">${num}</span>
             <div class="project-card-inner">
               ${previewHtml}
               ${badge}
@@ -97,21 +120,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const researchIds = Object.keys(data.projects).filter((id) => data.projects[id].type === 'research');
 
       if (saasGrid) {
-        saasGrid.innerHTML = saasIds.map((id) => {
+        saasGrid.innerHTML = saasIds.map((id, i) => {
           const proj = data.projects[id][lang] || data.projects[id].en;
-          return renderProjectCard(id, proj, data.projects[id]);
+          return renderProjectCard(id, proj, data.projects[id], i);
         }).join('');
       }
       if (websitesGrid) {
-        websitesGrid.innerHTML = websiteIds.map((id) => {
+        websitesGrid.innerHTML = websiteIds.map((id, i) => {
           const proj = data.projects[id][lang] || data.projects[id].en;
-          return renderProjectCard(id, proj, data.projects[id]);
+          return renderProjectCard(id, proj, data.projects[id], i);
         }).join('');
       }
       if (researchGrid) {
-        researchGrid.innerHTML = researchIds.map((id) => {
+        researchGrid.innerHTML = researchIds.map((id, i) => {
           const proj = data.projects[id][lang] || data.projects[id].en;
-          return renderProjectCard(id, proj, data.projects[id]);
+          return renderProjectCard(id, proj, data.projects[id], i);
         }).join('');
       }
     }
@@ -124,13 +147,29 @@ document.addEventListener('DOMContentLoaded', () => {
   renderPortfolio(savedLang);
   initProjectCardHover();
 
-  document.querySelectorAll('.lang-btn').forEach((btn) => {
+  // ========== Hero split-letter effect ==========
+  const heroNameEl = document.getElementById('hero-name');
+  if (heroNameEl && !prefersReducedMotion) {
+    const text = heroNameEl.textContent;
+    heroNameEl.innerHTML = '';
+    heroNameEl.setAttribute('aria-label', text);
+    const chars = text.split('');
+    chars.forEach((char) => {
+      const span = document.createElement('span');
+      span.className = 'hero-name-char';
+      span.textContent = char === ' ' ? '\u00A0' : char;
+      span.style.display = char === ' ' ? 'inline' : 'inline-block';
+      heroNameEl.appendChild(span);
+    });
+  }
+
+  document.querySelectorAll('.side-nav-btn[data-lang]').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.lang === savedLang);
     btn.setAttribute('aria-pressed', btn.dataset.lang === savedLang);
     btn.addEventListener('click', () => {
       const lang = btn.dataset.lang;
       localStorage.setItem('portfolio-lang', lang);
-      document.querySelectorAll('.lang-btn').forEach((b) => {
+      document.querySelectorAll('.side-nav-btn[data-lang]').forEach((b) => {
         b.classList.toggle('active', b.dataset.lang === lang);
         b.setAttribute('aria-pressed', b.dataset.lang === lang);
       });
@@ -138,14 +177,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.querySelectorAll('.brightness-btn').forEach((btn) => {
+  document.querySelectorAll('.side-nav-btn[data-level]').forEach((btn) => {
     const level = parseFloat(btn.dataset.level);
     btn.classList.toggle('active', level === savedBrightness);
     btn.addEventListener('click', () => {
       localStorage.setItem('portfolio-brightness', String(level));
       const wrapper = document.getElementById('brightness-wrapper');
       if (wrapper) wrapper.style.filter = `brightness(${level})`;
-      document.querySelectorAll('.brightness-btn').forEach((b) => {
+      document.querySelectorAll('.side-nav-btn[data-level]').forEach((b) => {
         b.classList.toggle('active', parseFloat(b.dataset.level) === level);
       });
     });
@@ -166,10 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const sections = document.querySelectorAll('.section');
-  const navDots = document.querySelectorAll('.nav-dot');
+  const navLinks = document.querySelectorAll('.side-nav-link');
 
-  const updateNavDots = () => {
-    const scrollPos = window.scrollY + window.innerHeight / 2;
+  const updateNavLinks = () => {
+    const scrollPos = (lenis ? lenis.scroll : window.scrollY) + window.innerHeight / 2;
     let activeSection = 'hero';
     sections.forEach((section) => {
       const top = section.offsetTop;
@@ -178,32 +217,51 @@ document.addEventListener('DOMContentLoaded', () => {
         activeSection = section.id;
       }
     });
-    navDots.forEach((dot) => {
-      dot.classList.toggle('active', dot.dataset.section === activeSection);
+    navLinks.forEach((link) => {
+      link.classList.toggle('active', link.dataset.section === activeSection);
     });
   };
 
-  window.addEventListener('scroll', () => requestAnimationFrame(updateNavDots));
-  updateNavDots();
+  if (lenis) {
+    lenis.on('scroll', updateNavLinks);
+  } else {
+    window.addEventListener('scroll', () => requestAnimationFrame(updateNavLinks));
+  }
+  updateNavLinks();
 
   // ========== Hero entrance animation ==========
   // Elements start hidden in CSS to avoid flash before GSAP runs; animate to visible.
+  const heroNameChars = document.querySelectorAll('.hero-name-char');
+  const hasSplitName = heroNameChars.length > 0;
+
   if (prefersReducedMotion) {
     gsap.set('.hero-name, .hero-title, .hero-subtitle, .hero-cta .btn, .scroll-hint', { opacity: 1, y: 0 });
   } else {
-    gsap.to('.hero-name', {
-      opacity: 1,
-      y: 0,
-      duration: 0.8,
-      delay: 0.2,
-      ease: 'power2.out',
-      startAt: { opacity: 0, y: 30 },
-    });
+    if (hasSplitName) {
+      gsap.set('.hero-name', { opacity: 1 });
+      gsap.fromTo(heroNameChars, { opacity: 0, y: 24 }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        delay: 0.2,
+        stagger: 0.03,
+        ease: 'power2.out',
+      });
+    } else {
+      gsap.to('.hero-name', {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        delay: 0.2,
+        ease: 'power2.out',
+        startAt: { opacity: 0, y: 30 },
+      });
+    }
     gsap.to('.hero-title, .hero-subtitle', {
       opacity: 1,
       y: 0,
       duration: 0.7,
-      delay: 0.5,
+      delay: hasSplitName ? 0.7 : 0.5,
       stagger: 0.15,
       ease: 'power2.out',
       startAt: { opacity: 0, y: 24 },
@@ -256,6 +314,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
     });
+
+    gsap.utils.toArray('.project-card').forEach((card, i) => {
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 95%',
+          toggleActions: 'play none none reverse',
+        },
+        y: 28,
+        duration: 0.5,
+        delay: i * 0.05,
+        ease: 'power2.out',
+      });
+    });
+
+    gsap.utils.toArray('.stat-card').forEach((card, i) => {
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card.closest('.section-stats'),
+          start: 'top 90%',
+          toggleActions: 'play none none reverse',
+        },
+        y: 20,
+        opacity: 0,
+        duration: 0.5,
+        delay: i * 0.08,
+        ease: 'power2.out',
+      });
+    });
+  }
+
+  // ========== Stats counter animation ==========
+  if (!prefersReducedMotion) {
+    document.querySelectorAll('.stat-value[data-stat]').forEach((el) => {
+      const target = parseInt(el.dataset.stat, 10);
+      const obj = { val: 0 };
+      ScrollTrigger.create({
+        trigger: el.closest('.section-stats'),
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(obj, {
+            val: target,
+            duration: 1.2,
+            ease: 'power2.out',
+            onUpdate: () => {
+              el.textContent = Math.round(obj.val);
+            },
+          });
+        },
+        once: true,
+      });
+    });
+  } else {
+    document.querySelectorAll('.stat-value[data-stat]').forEach((el) => {
+      el.textContent = el.dataset.stat;
+    });
   }
 
   // ========== Scroll progress bar ==========
@@ -271,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ========== Smooth scroll for anchor links ==========
+  // ========== Smooth scroll for anchor links (including skip link) ==========
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     const targetId = anchor.getAttribute('href').slice(1);
     if (!targetId) return;
@@ -279,7 +393,11 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const target = document.getElementById(targetId);
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (lenis) {
+          lenis.scrollTo(target, { offset: 0, duration: 1.2 });
+        } else {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     });
   });
@@ -341,12 +459,14 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
   }
 
   function closeModal() {
     modal?.classList.remove('is-open');
     modal?.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    if (lenis) lenis.start();
   }
 
   document.getElementById('projects')?.addEventListener('click', (e) => {
@@ -361,6 +481,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal?.classList.contains('is-open')) closeModal();
+  });
+
+  // ========== Nav overlay toggle (mobile & tablet) ==========
+  const navToggle = document.getElementById('nav-toggle');
+  const navPanel = document.getElementById('nav-panel');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  const navClose = document.getElementById('nav-close');
+
+  function openNav() {
+    navPanel?.classList.add('is-open');
+    navBackdrop?.classList.add('is-visible');
+    navToggle?.setAttribute('aria-expanded', 'true');
+    navBackdrop?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNav() {
+    navPanel?.classList.remove('is-open');
+    navBackdrop?.classList.remove('is-visible');
+    navToggle?.setAttribute('aria-expanded', 'false');
+    navBackdrop?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  navToggle?.addEventListener('click', () => {
+    if (navPanel?.classList.contains('is-open')) closeNav();
+    else openNav();
+  });
+
+  navClose?.addEventListener('click', closeNav);
+  navBackdrop?.addEventListener('click', closeNav);
+
+  navPanel?.querySelectorAll('.side-nav-link').forEach((link) => {
+    link.addEventListener('click', closeNav);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navPanel?.classList.contains('is-open')) closeNav();
   });
 
   // ========== Copy email ==========
@@ -388,4 +546,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   window.addEventListener('resize', () => ScrollTrigger.refresh());
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => init());
+} else {
+  init();
+}

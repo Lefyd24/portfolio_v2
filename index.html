@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
   <!-- Subtle animated background (clouds/shadows) -->
   <div class="bg-canvas" aria-hidden="true">
     <div class="bg-blob bg-blob-1"></div>
@@ -21,12 +23,12 @@
 
   <!-- Brightness wrapper: filter on content only so fixed elements stay viewport-fixed -->
   <div id="brightness-wrapper">
-  <main class="sections">
+  <main id="main-content" class="sections" tabindex="-1">
     <!-- Section 1: Hero -->
     <section id="hero" class="section section-hero">
       <div class="hero-bg"></div>
       <div class="hero-content">
-        <h1 class="hero-name">Lefteris Fthenos</h1>
+        <h1 class="hero-name" id="hero-name" aria-label="Lefteris Fthenos">Lefteris Fthenos</h1>
         <p class="hero-title" data-i18n="hero.title">Software Developer & Business Analyst</p>
         <p class="hero-subtitle" data-i18n="hero.subtitle">MSc in Business Analytics | Python • Django • Full-Stack • Data Analytics</p>
         <div class="hero-cta">
@@ -39,6 +41,72 @@
       <div class="scroll-hint">
         <span data-i18n="hero.scrollHint">Scroll to explore</span>
         <div class="scroll-arrow"></div>
+      </div>
+      <!-- Tech stack marquee (infinite seamless loop) -->
+      <div class="marquee-wrap" aria-hidden="true">
+        <div class="marquee-track">
+          <div class="marquee-content">
+            <span class="marquee-item">Python</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Django</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Flask</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">FastAPI</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Power BI</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">SQL</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Azure</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">JavaScript</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Data Analytics</span>
+          </div>
+          <div class="marquee-content" aria-hidden="true">
+            <span class="marquee-item">Python</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Django</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Flask</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">FastAPI</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Power BI</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">SQL</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Azure</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">JavaScript</span>
+            <span class="marquee-sep">•</span>
+            <span class="marquee-item">Data Analytics</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats counters -->
+    <section id="stats" class="section section-stats">
+      <div class="section-inner">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-value" data-stat="6">0</span>
+            <span class="stat-suffix">+</span>
+            <span class="stat-label" data-i18n="stats.years">Years of Experience</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" data-stat="7">0</span>
+            <span class="stat-suffix">+</span>
+            <span class="stat-label" data-i18n="stats.projects">Projects Delivered</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" data-stat="5">0</span>
+            <span class="stat-suffix"></span>
+            <span class="stat-label" data-i18n="stats.roles">Roles & Expertise</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -81,22 +149,29 @@
       </div>
     </section>
 
-    <!-- Section 5: Projects (rendered from js/data/portfolio.js) -->
+    <!-- Section 5: Projects - Categorized showcase -->
     <section id="projects" class="section section-projects">
       <div class="section-inner">
         <h2 class="section-title" data-animate data-i18n="projects.title">Featured Projects</h2>
+        <p class="projects-lead" data-animate data-i18n="projects.lead">A selection of web applications, client work, and research</p>
 
-        <h3 class="projects-subtitle" data-animate data-i18n="projects.saasTitle">SaaS & Web Apps</h3>
-        <p class="projects-subtitle-desc" data-animate data-i18n="projects.saasDesc">Internal tools and applications where users perform tasks</p>
-        <div id="projects-saas" class="projects-grid"></div>
+        <div class="projects-category" data-animate>
+          <h3 class="projects-subtitle" data-i18n="projects.saasTitle">SaaS & Web Apps</h3>
+          <p class="projects-subtitle-desc" data-i18n="projects.saasDesc">Internal tools and applications where users perform tasks</p>
+          <div id="projects-saas" class="projects-grid"></div>
+        </div>
 
-        <h3 class="projects-subtitle" data-animate data-i18n="projects.websitesTitle">Client Websites</h3>
-        <p class="projects-subtitle-desc" data-animate data-i18n="projects.websitesDesc">Professional websites built for clients</p>
-        <div id="projects-websites" class="projects-grid"></div>
+        <div class="projects-category" data-animate>
+          <h3 class="projects-subtitle" data-i18n="projects.websitesTitle">Client Websites</h3>
+          <p class="projects-subtitle-desc" data-i18n="projects.websitesDesc">Professional websites built for clients</p>
+          <div id="projects-websites" class="projects-grid"></div>
+        </div>
 
-        <h3 class="projects-subtitle" data-animate data-i18n="projects.researchTitle">Research & Academic</h3>
-        <p class="projects-subtitle-desc" data-animate data-i18n="projects.researchDesc">Thesis and research projects</p>
-        <div id="projects-research" class="projects-grid"></div>
+        <div class="projects-category" data-animate>
+          <h3 class="projects-subtitle" data-i18n="projects.researchTitle">Research & Academic</h3>
+          <p class="projects-subtitle-desc" data-i18n="projects.researchDesc">Thesis and research projects</p>
+          <div id="projects-research" class="projects-grid"></div>
+        </div>
       </div>
     </section>
 
@@ -149,44 +224,53 @@
   </main>
   </div><!-- /#brightness-wrapper -->
 
-  <!-- Sidebar: Language, Theme & Brightness (vertical, follows scroll) -->
-  <aside class="sidebar" aria-label="Language and brightness controls">
-    <div class="sidebar-inner">
-      <div class="control-group">
-        <span class="control-label" data-i18n="language">Language</span>
-        <div class="control-buttons">
-          <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
-          <button type="button" class="lang-btn" data-lang="el" aria-pressed="false">ΕΛ</button>
+  <!-- Scroll progress indicator -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- Nav: desktop = full sidebar, tablet = dot menu, mobile = button + overlay -->
+  <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel" id="nav-toggle">
+    <span class="nav-toggle-dot"></span>
+    <span class="nav-toggle-dot"></span>
+    <span class="nav-toggle-dot"></span>
+  </button>
+
+  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+
+  <aside class="side-nav glass" id="nav-panel" aria-label="Navigation and settings">
+    <button type="button" class="nav-close" aria-label="Close menu" id="nav-close">&times;</button>
+    <nav class="side-nav-links" aria-label="Section navigation">
+      <a href="#hero" class="side-nav-link active" data-section="hero" data-i18n="nav.home">Home</a>
+      <a href="#stats" class="side-nav-link" data-section="stats" data-i18n="nav.stats">Stats</a>
+      <a href="#about" class="side-nav-link" data-section="about" data-i18n="nav.about">About</a>
+      <a href="#skills" class="side-nav-link" data-section="skills" data-i18n="nav.skills">Skills</a>
+      <a href="#experience" class="side-nav-link" data-section="experience" data-i18n="nav.experience">Experience</a>
+      <a href="#projects" class="side-nav-link" data-section="projects" data-i18n="nav.projects">Projects</a>
+      <a href="#contact" class="side-nav-link" data-section="contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="side-nav-divider"></div>
+    <div class="side-nav-controls">
+      <div class="side-nav-control">
+        <span class="side-nav-label" data-i18n="language">Language</span>
+        <div class="side-nav-btns">
+          <button type="button" class="side-nav-btn active" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" class="side-nav-btn" data-lang="el" aria-pressed="false">ΕΛ</button>
         </div>
       </div>
-      <div class="control-group">
-        <span class="control-label" data-i18n="brightness">Brightness</span>
-        <div class="brightness-control">
-          <button type="button" class="brightness-btn" data-level="0.85" aria-label="Dimmer" title="Dimmer">◐</button>
-          <button type="button" class="brightness-btn active" data-level="1" aria-label="Normal" title="Normal">◑</button>
-          <button type="button" class="brightness-btn" data-level="1.15" aria-label="Brighter" title="Brighter">◕</button>
+      <div class="side-nav-control">
+        <span class="side-nav-label" data-i18n="brightness">Brightness</span>
+        <div class="side-nav-btns side-nav-brightness">
+          <button type="button" class="side-nav-btn" data-level="0.85" aria-label="Dimmer" title="Dimmer">◐</button>
+          <button type="button" class="side-nav-btn active" data-level="1" aria-label="Normal" title="Normal">◑</button>
+          <button type="button" class="side-nav-btn" data-level="1.15" aria-label="Brighter" title="Brighter">◕</button>
         </div>
       </div>
     </div>
   </aside>
 
-  <!-- Scroll progress indicator -->
-  <div class="scroll-progress" aria-hidden="true"></div>
-
-  <!-- Navigation dots -->
-  <nav class="nav-dots" aria-label="Section navigation">
-    <a href="#hero" class="nav-dot active" data-section="hero" aria-label="Hero"></a>
-    <a href="#about" class="nav-dot" data-section="about" aria-label="About"></a>
-    <a href="#skills" class="nav-dot" data-section="skills" aria-label="Skills"></a>
-    <a href="#experience" class="nav-dot" data-section="experience" aria-label="Experience"></a>
-    <a href="#projects" class="nav-dot" data-section="projects" aria-label="Projects"></a>
-    <a href="#contact" class="nav-dot" data-section="contact" aria-label="Contact"></a>
-  </nav>
-
   <!-- Project Modal -->
   <div id="project-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
     <div class="modal-backdrop"></div>
-    <div class="modal-content glass">
+    <div class="modal-content glass" data-lenis-prevent>
       <div class="modal-header">
         <h2 id="modal-title" class="modal-title"></h2>
         <div id="modal-header-actions"></div>
@@ -201,6 +285,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/data/portfolio.js"></script>
-  <script src="js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -44,6 +44,7 @@ const translations = {
     },
     projects: {
       title: 'Featured Projects',
+      lead: 'A selection of web applications, client work, and research',
       saasTitle: 'SaaS & Web Apps',
       saasDesc: 'Internal tools and applications where users perform tasks',
       websitesTitle: 'Client Websites',
@@ -60,6 +61,20 @@ const translations = {
       proforma: { title: 'Proforma Invoice Application', desc: 'Flask app automating proforma invoice generation from SQL Server reservation data. ETL, caching, Apache/WSGI deployment.' },
       trustyou: { title: 'TrustYou Analytics Dashboard', desc: 'Flask app integrating TrustYou API for real-time hotel review insights. Interactive dashboards, sentiment analysis, Excel reporting.' },
       hconvrp: { title: 'HConVRP Solver', desc: 'Thesis project: Heterogeneous Consistent Vehicle Routing Problem solver with Flask UI, WebSockets, Tabu Search & VND heuristics.' },
+    },
+    stats: {
+      years: 'Years of Experience',
+      projects: 'Projects Delivered',
+      roles: 'Roles & Expertise',
+    },
+    nav: {
+      home: 'Home',
+      stats: 'Stats',
+      about: 'About',
+      skills: 'Skills',
+      experience: 'Experience',
+      projects: 'Projects',
+      contact: 'Contact',
     },
     contact: {
       title: 'Get In Touch',
@@ -115,6 +130,7 @@ const translations = {
     },
     projects: {
       title: 'Επιλεγμένα Έργα',
+      lead: 'Επιλογή εφαρμογών web, έργων πελατών και έρευνας',
       saasTitle: 'SaaS & Εφαρμογές Web',
       saasDesc: 'Εσωτερικά εργαλεία και εφαρμογές όπου οι χρήστες εκτελούν εργασίες',
       websitesTitle: 'Ιστοσελίδες Πελατών',
@@ -131,6 +147,20 @@ const translations = {
       proforma: { title: 'Εφαρμογή Προτιμολογίων', desc: 'Εφαρμογή Flask για αυτοματοποίηση δημιουργίας προτιμολογίων από δεδομένα κρατήσεων SQL Server. ETL, caching, ανάπτυξη Apache/WSGI.' },
       trustyou: { title: 'TrustYou Analytics Dashboard', desc: 'Εφαρμογή Flask που ενσωματώνει το TrustYou API για πληροφορίες κριτικών πελατών σε πραγματικό χρόνο. Διαδραστικοί πίνακες ελέγχου, ανάλυση συναισθήματος, αναφορές Excel.' },
       hconvrp: { title: 'HConVRP Solver', desc: 'Έργο διπλωματικής: Επιλύτης Heterogeneous Consistent Vehicle Routing Problem με Flask UI, WebSockets, Tabu Search & VND heuristics.' },
+    },
+    stats: {
+      years: 'Χρόνια Εμπειρίας',
+      projects: 'Έργα που Ολοκληρώθηκαν',
+      roles: 'Ρόλοι & Εξειδίκευση',
+    },
+    nav: {
+      home: 'Αρχική',
+      stats: 'Στατιστικά',
+      about: 'Σχετικά',
+      skills: 'Δεξιότητες',
+      experience: 'Εμπειρία',
+      projects: 'Έργα',
+      contact: 'Επικοινωνία',
     },
     contact: {
       title: 'Επικοινωνία',
@@ -199,10 +229,10 @@ function applyTranslations(lang) {
   // Project cards: content comes from js/data/portfolio.js (bilingual), not i18n
 
   // Control labels
-  document.querySelectorAll('.control-label[data-i18n="language"]').forEach((el) => {
+  document.querySelectorAll('.side-nav-label[data-i18n="language"]').forEach((el) => {
     el.textContent = t.language;
   });
-  document.querySelectorAll('.control-label[data-i18n="brightness"]').forEach((el) => {
+  document.querySelectorAll('.side-nav-label[data-i18n="brightness"]').forEach((el) => {
     el.textContent = t.brightness;
   });
 }
