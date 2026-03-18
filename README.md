@@ -34,7 +34,28 @@ python3 -m http.server 8000
 
 ## Deployment
 
-Static site - deploy to GitHub Pages, Netlify, Vercel, or any static host. Ensure CV PDFs are included.
+### Cloudflare Pages (configured)
+
+**Option A: Git-based (recommended)**
+
+1. Push this repo to GitHub
+2. Go to [Cloudflare Dashboard](https://dash.cloudflare.com/) → Workers & Pages → Create → Pages → Connect to Git
+3. Select your repo and configure:
+   - **Build command:** `npm install && npm run build`
+   - **Build output directory:** `.` (project root)
+4. Deploy. The `wrangler.toml` in the repo is used for Pages configuration
+
+**Option B: CLI deploy**
+
+```bash
+npm run deploy
+```
+
+Requires [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/) and `wrangler login` first.
+
+---
+
+Static site – also deployable to GitHub Pages, Netlify, Vercel, or any static host. Ensure CV PDFs are included.
 
 ## Structure
 

@@ -1,290 +1,484 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Lefteris Fthenos - Software Developer & Business Analyst. Python, Django, Flask, Power BI, Data Analytics.">
-  <title>Lefteris Fthenos | Software Developer & Business Analyst</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-  <a href="#main-content" class="skip-link">Skip to content</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lefteris Fthenos | Business Analyst & Full Stack Developer</title>
+    <meta
+      name="description"
+      content="Lefteris Fthenos — Business Analytics Assistant Manager. MSc Business Analytics (AUEB). Full stack developer (Django, Flask, FastAPI), Power BI & SQL. Building enterprise SaaS, analytics dashboards, and client websites."
+    />
+    <meta name="keywords" content="Lefteris Fthenos, Business Analyst, Business Analytics, Full Stack Developer, Python, Django, Flask, FastAPI, Power BI, SQL, AUEB, data analytics, web development" />
+    <meta property="og:title" content="Lefteris Fthenos | Business Analyst & Full Stack Developer" />
+    <meta property="og:description" content="Business Analytics Assistant Manager. MSc Business Analytics (AUEB). Building enterprise SaaS, analytics dashboards, and client websites." />
 
-  <!-- Subtle animated background (clouds/shadows) -->
-  <div class="bg-canvas" aria-hidden="true">
-    <div class="bg-blob bg-blob-1"></div>
-    <div class="bg-blob bg-blob-2"></div>
-    <div class="bg-blob bg-blob-3"></div>
-    <div class="bg-blob bg-blob-4"></div>
-  </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Brightness wrapper: filter on content only so fixed elements stay viewport-fixed -->
-  <div id="brightness-wrapper">
-  <main id="main-content" class="sections" tabindex="-1">
-    <!-- Section 1: Hero -->
-    <section id="hero" class="section section-hero">
-      <div class="hero-bg"></div>
-      <div class="hero-content">
-        <h1 class="hero-name" id="hero-name" aria-label="Lefteris Fthenos">Lefteris Fthenos</h1>
-        <p class="hero-title" data-i18n="hero.title">Software Developer & Business Analyst</p>
-        <p class="hero-subtitle" data-i18n="hero.subtitle">MSc in Business Analytics | Python • Django • Full-Stack • Data Analytics</p>
-        <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary" data-i18n="hero.viewWork">View My Work</a>
-          <a href="#contact" class="btn btn-secondary" data-i18n="hero.getInTouch">Get In Touch</a>
-          <a href="English CV - 2025 - DEV.pdf" class="btn btn-outline" download data-i18n="hero.cvDev">CV (Dev)</a>
-          <a href="English CV - 2025 - BA.pdf" class="btn btn-outline" download data-i18n="hero.cvBa">CV (BA)</a>
-        </div>
-      </div>
-      <div class="scroll-hint">
-        <span data-i18n="hero.scrollHint">Scroll to explore</span>
-        <div class="scroll-arrow"></div>
-      </div>
-      <!-- Tech stack marquee (infinite seamless loop) -->
-      <div class="marquee-wrap" aria-hidden="true">
-        <div class="marquee-track">
-          <div class="marquee-content">
-            <span class="marquee-item">Python</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Django</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Flask</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">FastAPI</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Power BI</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">SQL</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Azure</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">JavaScript</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Data Analytics</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="marquee-item">Python</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Django</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Flask</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">FastAPI</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Power BI</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">SQL</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Azure</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">JavaScript</span>
-            <span class="marquee-sep">•</span>
-            <span class="marquee-item">Data Analytics</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    <link rel="stylesheet" href="./public/output.css" />
 
-    <!-- Stats counters -->
-    <section id="stats" class="section section-stats">
-      <div class="section-inner">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="stat-value" data-stat="6">0</span>
-            <span class="stat-suffix">+</span>
-            <span class="stat-label" data-i18n="stats.years">Years of Experience</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" data-stat="7">0</span>
-            <span class="stat-suffix">+</span>
-            <span class="stat-label" data-i18n="stats.projects">Projects Delivered</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" data-stat="5">0</span>
-            <span class="stat-suffix"></span>
-            <span class="stat-label" data-i18n="stats.roles">Roles & Expertise</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.174.0/build/three.module.js"
+        }
+      }
+    </script>
 
-    <!-- Section 2: About -->
-    <section id="about" class="section section-about">
-      <div class="section-inner">
-        <h2 class="section-title" data-animate data-i18n="about.title">About Me</h2>
-        <div class="about-content" data-animate>
-          <p class="about-lead" data-i18n="about.lead"></p>
-          <p data-i18n="about.p1"></p>
-          <p data-i18n="about.p2"></p>
-          <div class="about-expertise">
-            <div class="expertise-card">
-              <h3 data-i18n="about.expertise1.title">Backend Development</h3>
-              <p data-i18n="about.expertise1.desc">Building scalable web applications with Python, Django, Flask, and FastAPI</p>
-            </div>
-            <div class="expertise-card">
-              <h3 data-i18n="about.expertise2.title">Business Analytics</h3>
-              <p data-i18n="about.expertise2.desc">Transforming data into actionable insights that drive business decisions</p>
-            </div>
-          </div>
-          <div class="about-languages" data-i18n="about.languages"></div>
-        </div>
-      </div>
-    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  </head>
 
-    <!-- Section 3: Skills (rendered from js/data/portfolio.js) -->
-    <section id="skills" class="section section-skills">
-      <div class="section-inner">
-        <h2 class="section-title" data-animate data-i18n="skills.title">Technical Skills</h2>
-        <div id="skills-grid" class="skills-grid"></div>
-      </div>
-    </section>
+  <body class="font-sans bg-slate-50 text-slate-900 antialiased transition-colors duration-300 ease-in-out dark:bg-ink-950 dark:text-slate-100">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 rounded-lg bg-white px-3 py-2 text-sm font-semibold shadow ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700 dark:text-slate-100"
+    >
+      Skip to content
+    </a>
 
-    <!-- Section 4: Experience (rendered from js/data/portfolio.js) -->
-    <section id="experience" class="section section-experience">
-      <div class="section-inner">
-        <h2 class="section-title" data-animate data-i18n="experience.title">Experience</h2>
-        <div id="timeline" class="timeline"></div>
-      </div>
-    </section>
-
-    <!-- Section 5: Projects - Categorized showcase -->
-    <section id="projects" class="section section-projects">
-      <div class="section-inner">
-        <h2 class="section-title" data-animate data-i18n="projects.title">Featured Projects</h2>
-        <p class="projects-lead" data-animate data-i18n="projects.lead">A selection of web applications, client work, and research</p>
-
-        <div class="projects-category" data-animate>
-          <h3 class="projects-subtitle" data-i18n="projects.saasTitle">SaaS & Web Apps</h3>
-          <p class="projects-subtitle-desc" data-i18n="projects.saasDesc">Internal tools and applications where users perform tasks</p>
-          <div id="projects-saas" class="projects-grid"></div>
-        </div>
-
-        <div class="projects-category" data-animate>
-          <h3 class="projects-subtitle" data-i18n="projects.websitesTitle">Client Websites</h3>
-          <p class="projects-subtitle-desc" data-i18n="projects.websitesDesc">Professional websites built for clients</p>
-          <div id="projects-websites" class="projects-grid"></div>
-        </div>
-
-        <div class="projects-category" data-animate>
-          <h3 class="projects-subtitle" data-i18n="projects.researchTitle">Research & Academic</h3>
-          <p class="projects-subtitle-desc" data-i18n="projects.researchDesc">Thesis and research projects</p>
-          <div id="projects-research" class="projects-grid"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 6: Contact -->
-    <section id="contact" class="section section-contact">
-      <div class="section-inner">
-        <h2 class="section-title" data-animate data-i18n="contact.title">Get In Touch</h2>
-        <p class="contact-lead" data-animate data-i18n="contact.lead">I'm always open to new opportunities and collaborations.</p>
-        <div class="contact-grid" data-animate>
-          <div class="contact-card contact-card-email">
-            <div class="contact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            </div>
-            <h3 class="contact-card-title" data-i18n="contact.emailLabel">Email</h3>
-            <a href="mailto:fthenosyd@gmail.com" class="contact-email">fthenosyd@gmail.com</a>
-            <button type="button" class="contact-copy" data-email="fthenosyd@gmail.com" aria-label="Copy email">
-              <span class="contact-copy-text" data-i18n="contact.copy">Copy</span>
-              <svg class="contact-copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    <div
+      id="scroll-root"
+      class="h-dvh overflow-y-auto scroll-smooth overscroll-contain transition-colors duration-300 ease-in-out"
+      aria-label="Portfolio sections"
+    >
+      <header class="pointer-events-none fixed inset-x-0 top-0 z-40">
+        <div class="pointer-events-auto mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 md:px-6">
+          <a
+            href="#hero"
+            class="glass glass-hover group inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white"
+            aria-label="Go to top"
+          >
+            <span class="h-2 w-2 rounded-full bg-teal-500"></span>
+            LF
+          </a>
+          <div class="hidden items-center gap-2 md:flex">
+            <nav class="hidden items-center gap-2 md:flex" aria-label="Primary navigation">
+            <a
+              class="glass glass-hover rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:text-slate-200 dark:hover:text-white"
+              href="#about"
+              >About</a
+            >
+            <a
+              class="glass glass-hover rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:text-slate-200 dark:hover:text-white"
+              href="#work"
+              >Work</a
+            >
+            <a
+              class="glass glass-hover rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:text-slate-200 dark:hover:text-white"
+              href="#experience"
+              >Experience</a
+            >
+            <a
+              class="glass glass-hover rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:text-slate-200 dark:hover:text-white"
+              href="#skills"
+              >Skills</a
+            >
+            <a
+              class="glass glass-hover rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:text-slate-200 dark:hover:text-white"
+              href="#contact"
+              >Contact</a
+            >
+            </nav>
+            <button
+              id="theme-toggle"
+              type="button"
+              class="glass-btn inline-flex h-10 w-10 items-center justify-center rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/25"
+              aria-label="Toggle dark mode"
+            >
+              <svg id="theme-icon-sun" class="h-5 w-5 text-slate-700 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+              </svg>
+              <svg id="theme-icon-moon" class="hidden h-5 w-5 text-slate-200 dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+              </svg>
             </button>
           </div>
-          <div class="contact-card contact-card-social">
-            <div class="contact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8v8M12 12v4M8 8v8"/></svg>
-            </div>
-            <h3 class="contact-card-title" data-i18n="contact.connectLabel">Connect</h3>
-            <div class="contact-links">
-              <a href="https://www.linkedin.com/in/eleftherios-fthenos" target="_blank" rel="noopener noreferrer" class="contact-link" aria-label="LinkedIn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                <span>LinkedIn</span>
-              </a>
-              <a href="https://github.com/Lefyd24" target="_blank" rel="noopener noreferrer" class="contact-link" aria-label="GitHub">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                <span>GitHub</span>
-              </a>
+        </div>
+      </header>
+
+      <main id="main" tabindex="-1" class="relative">
+        <!-- HERO -->
+        <section
+          id="hero"
+          class="relative flex min-h-dvh items-center justify-center overflow-hidden px-4 pt-24 md:px-6"
+          aria-label="Hero section"
+        >
+          <canvas
+            id="hero-canvas"
+            class="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-70 dark:opacity-90"
+            aria-hidden="true"
+          ></canvas>
+
+          <div class="relative mx-auto w-full max-w-5xl">
+            <div class="mx-auto max-w-2xl">
+              <p class="reveal text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                Business Analytics Assistant Manager · MSc AUEB · Full Stack Developer
+              </p>
+              <h1 class="reveal mt-4 text-4xl font-semibold tracking-tight text-ink-950 md:text-6xl dark:text-white">
+                Lefteris Fthenos
+              </h1>
+              <p class="reveal mt-5 text-base leading-relaxed text-slate-700 md:text-lg dark:text-slate-200">
+                I lead business analytics and build enterprise software for a multi-property hospitality group.
+                I ship internal SaaS platforms (Power Automate, Power Apps, Django, FastAPI), analytics dashboards with Power BI and SQL,
+                and client websites with clean, bilingual UX.
+              </p>
+
+              <div class="reveal mt-7 flex flex-wrap items-center gap-2">
+                <a
+                  href="#work"
+                  class="rounded-xl bg-ink-950 px-4 py-2.5 text-sm font-semibold text-white shadow hover:bg-ink-950/90 focus:outline-none focus:ring-2 focus:ring-ink-950/30"
+                >
+                  View work
+                </a>
+                <a
+                  id="cv-dev"
+                  href="#"
+                  class="glass glass-hover rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400/30 dark:text-slate-100"
+                >
+                  CV (Dev)
+                </a>
+                <a
+                  id="cv-ba"
+                  href="#"
+                  class="glass glass-hover rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400/30 dark:text-slate-100"
+                >
+                  CV (BA)
+                </a>
+                <a
+                  href="#contact"
+                  class="rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400/30 dark:text-slate-300 dark:hover:text-white"
+                >
+                  Get in touch
+                </a>
+              </div>
+
+              <div class="reveal mt-10 grid gap-3 sm:grid-cols-3">
+                <div class="glass-card rounded-2xl p-4">
+                  <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Enterprise SaaS</div>
+                  <div class="mt-2 text-sm font-semibold text-slate-900 dark:text-white">Finance & operations</div>
+                  <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Budget, cash flow, attendance, approvals, audit trails</p>
+                </div>
+                <div class="glass-card rounded-2xl p-4">
+                  <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Analytics & BI</div>
+                  <div class="mt-2 text-sm font-semibold text-slate-900 dark:text-white">Data-driven decisions</div>
+                  <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Power BI, SQL, ETL, Azure Data Warehouse</p>
+                </div>
+                <div class="glass-card rounded-2xl p-4">
+                  <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Client websites</div>
+                  <div class="mt-2 text-sm font-semibold text-slate-900 dark:text-white">Bilingual & responsive</div>
+                  <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Modern UX, accessibility, serverless contact flows</p>
+                </div>
+              </div>
+
+              <p class="reveal mt-10 text-xs text-slate-500">
+                Scroll
+                <span class="inline-flex translate-y-[1px] items-center px-1.5">↓</span>
+                to learn more about me
+              </p>
             </div>
           </div>
-          <div class="contact-card contact-card-cv">
-            <div class="contact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="section-slide min-h-dvh px-4 py-24 md:px-6" aria-label="About">
+          <div class="mx-auto w-full max-w-5xl">
+            <div class="mx-auto max-w-2xl">
+              <h2 class="reveal text-2xl font-semibold tracking-tight text-ink-950 md:text-3xl dark:text-white">About</h2>
+              <p class="reveal mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-200">
+                I hold a BSc in Accounting & Finance and an MSc in Business Analytics from the Athens University of
+                Economics & Business (AUEB), where I graduated second in my class with a GPA of 9.01/10. What drives
+                me is the intersection of data, technology, and business performance—I’m curious about how things work
+                and restless when it comes to learning new tools.
+              </p>
+              <p class="reveal mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-200">
+                That curiosity pushed me beyond accounting and finance into business intelligence and web development.
+                I now lead business analytics and build enterprise software: internal SaaS platforms
+                (budget, cash flow, attendance, approvals), Power BI dashboards, and client websites. I operate at the
+                intersection of product, data, and engineering—mapping real workflows, designing the right abstractions,
+                and shipping software that teams actually adopt.
+              </p>
+              <div class="reveal mt-6 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
+                <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">What I do</div>
+                <div class="mt-3 grid gap-3 sm:grid-cols-3">
+                  <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                    <div class="text-sm font-semibold text-slate-900 dark:text-white">SaaS platforms</div>
+                    <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                      Django/Flask/FastAPI apps with roles, approvals, audit trails, exports, and embedded reporting.
+                    </p>
+                  </div>
+                  <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                    <div class="text-sm font-semibold text-slate-900 dark:text-white">Analytics & BI</div>
+                    <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                      SQL + Power BI dashboards, KPI models, automation, and practical ETL for business decisions.
+                    </p>
+                  </div>
+                  <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                    <div class="text-sm font-semibold text-slate-900 dark:text-white">Client websites</div>
+                    <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                      Fast, accessible, bilingual sites with a polished UI and dependable contact flows.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="reveal mt-8 grid gap-3 sm:grid-cols-2">
+                <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
+                  <div class="text-sm font-semibold">What I care about</div>
+                  <ul class="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                    <li class="flex items-start gap-2">
+                      <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500"></span>
+                      Clear workflows and low-friction UX
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500"></span>
+                      Maintainable backends and reliable data pipelines
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500"></span>
+                      Shipping: correctness, performance, and clarity
+                    </li>
+                  </ul>
+                </div>
+                <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
+                  <div class="text-sm font-semibold">At a glance</div>
+                  <dl class="mt-3 grid grid-cols-2 gap-3 text-sm">
+                    <div class="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                      <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Location</dt>
+                      <dd class="mt-1 font-semibold text-slate-900 dark:text-white">Heraklion, Crete</dd>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                      <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Languages</dt>
+                      <dd class="mt-1 font-semibold text-slate-900 dark:text-white">Greek · English (C2)</dd>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                      <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Stack</dt>
+                      <dd class="mt-1 font-semibold text-slate-900 dark:text-white">Python · SQL · Power BI</dd>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                      <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Publication</dt>
+                      <dd class="mt-1 font-semibold text-slate-900 dark:text-white">HConVRP (AUEB)</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+              <div class="reveal mt-8 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
+                <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">By the numbers</div>
+                <dl class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  <div class="rounded-xl bg-slate-50 p-4 text-center ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                    <dd class="text-2xl font-bold text-teal-600 dark:text-teal-400">5+</dd>
+                    <dt class="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">Years of coding</dt>
+                  </div>
+                  <div class="rounded-xl bg-slate-50 p-4 text-center ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                    <dd class="text-2xl font-bold text-teal-600 dark:text-teal-400">6</dd>
+                    <dt class="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">Enterprise apps shipped</dt>
+                  </div>
+                  <div class="rounded-xl bg-slate-50 p-4 text-center ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                    <dd class="text-2xl font-bold text-teal-600 dark:text-teal-400">2</dd>
+                    <dt class="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">Client websites built</dt>
+                  </div>
+                  <div class="rounded-xl bg-slate-50 p-4 text-center ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                    <dd class="text-2xl font-bold text-teal-600 dark:text-teal-400">9.01</dd>
+                    <dt class="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">MSc GPA (AUEB)</dt>
+                  </div>
+                </dl>
+              </div>
             </div>
-            <h3 class="contact-card-title" data-i18n="contact.cvLabel">Resume</h3>
-            <div class="contact-cv">
-              <a href="English CV - 2025 - DEV.pdf" class="btn btn-outline btn-cv" target="_blank" rel="noopener noreferrer" data-i18n="contact.cvDev">Developer</a>
-              <a href="English CV - 2025 - BA.pdf" class="btn btn-outline btn-cv" target="_blank" rel="noopener noreferrer" data-i18n="contact.cvBa">Business Analyst</a>
+          </div>
+        </section>
+
+        <!-- WORK -->
+        <section id="work" class="section-slide min-h-dvh px-4 py-24 md:px-6" aria-label="Work">
+          <div class="mx-auto w-full max-w-5xl">
+            <div class="mx-auto max-w-2xl">
+              <div class="flex items-end justify-between gap-4">
+                <h2 class="reveal text-2xl font-semibold tracking-tight text-ink-950 md:text-3xl dark:text-white">Work</h2>
+                <p class="reveal text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Selected</p>
+              </div>
+              <p class="reveal mt-4 text-base leading-relaxed text-slate-700">
+                A mix of internal SaaS platforms, client websites, and research projects.
+              </p>
             </div>
+
+            <div class="mt-10 grid gap-10">
+              <div>
+                <div class="reveal mx-auto flex w-full max-w-2xl items-center justify-between gap-4">
+                  <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">SaaS & internal apps</h3>
+                  <div class="h-px flex-1 bg-slate-200"></div>
+                </div>
+                <div id="work-saas" class="mt-5 grid gap-4 md:grid-cols-2"></div>
+              </div>
+
+              <div>
+                <div class="reveal mx-auto flex w-full max-w-2xl items-center justify-between gap-4">
+                  <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Client websites</h3>
+                  <div class="h-px flex-1 bg-slate-200"></div>
+                </div>
+                <div id="work-websites" class="mt-5 grid gap-4 md:grid-cols-2"></div>
+              </div>
+
+              <div>
+                <div class="reveal mx-auto flex w-full max-w-2xl items-center justify-between gap-4">
+                  <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Research</h3>
+                  <div class="h-px flex-1 bg-slate-200"></div>
+                </div>
+                <div id="work-research" class="mt-5 grid gap-4 md:grid-cols-2"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience" class="section-slide min-h-dvh px-4 py-24 md:px-6" aria-label="Experience">
+          <div class="mx-auto w-full max-w-5xl">
+            <div class="mx-auto max-w-2xl">
+              <h2 class="reveal text-2xl font-semibold tracking-tight text-ink-950 md:text-3xl dark:text-white">Experience</h2>
+              <p class="reveal mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-200">
+                Recent roles focused on building enterprise apps and analytics systems.
+              </p>
+            </div>
+
+            <div class="mx-auto mt-10 w-full max-w-2xl">
+              <ol id="experience-list" class="space-y-4"></ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills" class="section-slide min-h-dvh px-4 py-24 md:px-6" aria-label="Skills">
+          <div class="mx-auto w-full max-w-5xl">
+            <div class="mx-auto max-w-2xl">
+              <h2 class="reveal text-2xl font-semibold tracking-tight text-ink-950 md:text-3xl dark:text-white">Skills</h2>
+              <p class="reveal mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-200">
+                Practical stack for shipping apps, analytics, and production deployments.
+              </p>
+            </div>
+
+            <div id="skills-grid" class="mx-auto mt-10 grid w-full max-w-3xl gap-3 sm:grid-cols-2"></div>
+          </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section-slide min-h-dvh px-4 py-24 md:px-6" aria-label="Contact">
+          <div class="mx-auto w-full max-w-5xl">
+            <div class="mx-auto max-w-2xl">
+              <h2 class="reveal text-2xl font-semibold tracking-tight text-ink-950 md:text-3xl dark:text-white">Contact</h2>
+              <p class="reveal mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-200">
+                If you’re hiring or want to collaborate, I’d love to talk.
+              </p>
+
+              <div class="reveal mt-8 grid gap-3 sm:grid-cols-2">
+                <a
+                  id="contact-email"
+                  href="#"
+                  class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:bg-slate-900 dark:ring-slate-700"
+                  aria-label="Email"
+                >
+                  <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Email</div>
+                  <div class="mt-2 text-sm font-semibold text-slate-900 dark:text-white">fthenosyd@gmail.com</div>
+                </a>
+                <a
+                  id="contact-linkedin"
+                  href="#"
+                  class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:bg-slate-900 dark:ring-slate-700"
+                  aria-label="LinkedIn"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">LinkedIn</div>
+                  <div class="mt-2 text-sm font-semibold text-slate-900 dark:text-white">eleftherios-fthenos</div>
+                </a>
+                <a
+                  id="contact-github"
+                  href="#"
+                  class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:bg-slate-900 dark:ring-slate-700"
+                  aria-label="GitHub"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">GitHub</div>
+                  <div class="mt-2 text-sm font-semibold text-slate-900 dark:text-white">Lefyd24</div>
+                </a>
+                <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
+                  <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">CV</div>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <a
+                      id="contact-cv-dev"
+                      href="#"
+                      class="rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500/20 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+                    >
+                      Developer
+                    </a>
+                    <a
+                      id="contact-cv-ba"
+                      href="#"
+                      class="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 ring-1 ring-slate-200 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500/20 dark:bg-slate-800 dark:text-slate-100 dark:ring-slate-700 dark:hover:bg-slate-700"
+                    >
+                      Analyst
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <footer class="reveal mt-12 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span>© <span id="year"></span> Lefteris Fthenos</span>
+                <span class="hidden sm:inline">All rights reserved</span>
+              </footer>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Styles are built via Tailwind CLI into `public/output.css` -->
+
+    <dialog
+      id="project-modal"
+      class="backdrop:bg-slate-900/40 backdrop:backdrop-blur-md w-[min(760px,calc(100vw-2rem))] rounded-2xl p-0 shadow-2xl ring-1 ring-slate-200/80 dark:ring-slate-600/50"
+      aria-label="Project details"
+    >
+      <div class="rounded-2xl bg-white dark:bg-slate-900">
+        <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+          <div class="min-w-0">
+            <div id="modal-eyebrow" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400"></div>
+            <h3 id="modal-title" class="mt-1 truncate text-lg font-semibold text-slate-900 dark:text-white"></h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <div id="modal-header-links" class="flex flex-wrap items-center justify-end gap-2"></div>
+            <form method="dialog">
+              <button
+                class="rounded-xl bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-white hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:bg-slate-800 dark:text-slate-100 dark:ring-slate-700 dark:hover:bg-slate-700"
+                aria-label="Close modal"
+              >
+                Close
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="space-y-6 px-5 py-5">
+          <div id="modal-media" class="hidden overflow-hidden rounded-2xl ring-1 ring-slate-200 dark:ring-slate-700"></div>
+
+          <p id="modal-summary" class="text-sm leading-relaxed text-slate-700 dark:text-slate-200"></p>
+          <div id="modal-description" class="hidden text-sm leading-relaxed text-slate-700 dark:text-slate-200"></div>
+
+          <div id="modal-details" class="hidden">
+            <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Highlights</div>
+            <ul id="modal-details-list" class="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-200"></ul>
+          </div>
+
+          <div id="modal-tags" class="hidden">
+            <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Tech</div>
+            <div id="modal-tags-list" class="mt-3 flex flex-wrap gap-2"></div>
           </div>
         </div>
       </div>
-    </section>
-  </main>
-  </div><!-- /#brightness-wrapper -->
+    </dialog>
 
-  <!-- Scroll progress indicator -->
-  <div class="scroll-progress" aria-hidden="true"></div>
-
-  <!-- Nav: desktop = full sidebar, tablet = dot menu, mobile = button + overlay -->
-  <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel" id="nav-toggle">
-    <span class="nav-toggle-dot"></span>
-    <span class="nav-toggle-dot"></span>
-    <span class="nav-toggle-dot"></span>
-  </button>
-
-  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
-
-  <aside class="side-nav glass" id="nav-panel" aria-label="Navigation and settings">
-    <button type="button" class="nav-close" aria-label="Close menu" id="nav-close">&times;</button>
-    <nav class="side-nav-links" aria-label="Section navigation">
-      <a href="#hero" class="side-nav-link active" data-section="hero" data-i18n="nav.home">Home</a>
-      <a href="#stats" class="side-nav-link" data-section="stats" data-i18n="nav.stats">Stats</a>
-      <a href="#about" class="side-nav-link" data-section="about" data-i18n="nav.about">About</a>
-      <a href="#skills" class="side-nav-link" data-section="skills" data-i18n="nav.skills">Skills</a>
-      <a href="#experience" class="side-nav-link" data-section="experience" data-i18n="nav.experience">Experience</a>
-      <a href="#projects" class="side-nav-link" data-section="projects" data-i18n="nav.projects">Projects</a>
-      <a href="#contact" class="side-nav-link" data-section="contact" data-i18n="nav.contact">Contact</a>
-    </nav>
-    <div class="side-nav-divider"></div>
-    <div class="side-nav-controls">
-      <div class="side-nav-control">
-        <span class="side-nav-label" data-i18n="language">Language</span>
-        <div class="side-nav-btns">
-          <button type="button" class="side-nav-btn active" data-lang="en" aria-pressed="true">EN</button>
-          <button type="button" class="side-nav-btn" data-lang="el" aria-pressed="false">ΕΛ</button>
-        </div>
-      </div>
-      <div class="side-nav-control">
-        <span class="side-nav-label" data-i18n="brightness">Brightness</span>
-        <div class="side-nav-btns side-nav-brightness">
-          <button type="button" class="side-nav-btn" data-level="0.85" aria-label="Dimmer" title="Dimmer">◐</button>
-          <button type="button" class="side-nav-btn active" data-level="1" aria-label="Normal" title="Normal">◑</button>
-          <button type="button" class="side-nav-btn" data-level="1.15" aria-label="Brighter" title="Brighter">◕</button>
-        </div>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Project Modal -->
-  <div id="project-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
-    <div class="modal-backdrop"></div>
-    <div class="modal-content glass" data-lenis-prevent>
-      <div class="modal-header">
-        <h2 id="modal-title" class="modal-title"></h2>
-        <div id="modal-header-actions"></div>
-        <button class="modal-close" aria-label="Close modal">&times;</button>
-      </div>
-      <div class="modal-body"></div>
-      <div class="modal-footer"></div>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="js/i18n.js"></script>
-  <script src="js/data/portfolio.js"></script>
-  <script type="module" src="js/main.js"></script>
-</body>
+    <script type="module" src="./js/main.js"></script>
+  </body>
 </html>
+

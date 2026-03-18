@@ -1,0 +1,5 @@
+# Cloudflare Pages configuration
+# https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+
+name = "portfolio"
+pages_build_output_dir = "."

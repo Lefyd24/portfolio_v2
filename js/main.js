@@ -1,555 +1,630 @@
-/**
- * Extreme Developer Portfolio - Main JavaScript
- * GSAP ScrollTrigger + Lenis smooth scroll
- */
+import { initHeroThreeBackground } from './three-bg.js'
+import { PORTFOLIO } from './data/portfolio.js'
 
-async function init() {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const PROFILE = {
+  links: {
+    github: 'https://github.com/Lefyd24',
+    linkedin: 'https://www.linkedin.com/in/eleftherios-fthenos',
+    email: 'mailto:fthenosyd@gmail.com',
+  },
+  cv: {
+    dev: '../English CV - 2025 - DEV.pdf',
+    ba: '../English CV - 2025 - BA.pdf',
+  },
+}
 
-  gsap.registerPlugin(ScrollTrigger);
+const byType = (projects, type) => projects.filter((p) => p.type === type)
 
-  // ========== Lenis smooth scroll + GSAP ScrollTrigger integration ==========
-  let Lenis = null;
+const safe = (s) => (typeof s === 'string' ? s : '')
+
+const prefersDarkTheme = () => {
+  if (typeof window === 'undefined') return false
+  return Boolean(window.matchMedia?.('(prefers-color-scheme: dark)')?.matches)
+}
+
+const setTheme = (theme) => {
+  if (typeof document === 'undefined') return
+  const isDark = theme === 'dark'
+  document.documentElement.classList.toggle('dark', isDark)
   try {
-    const mod = await import('https://unpkg.com/lenis@1.3.18/dist/lenis.mjs');
-    Lenis = mod.default;
+    window.localStorage?.setItem('theme', isDark ? 'dark' : 'light')
   } catch {
-    Lenis = null;
+    // ignore
+  }
+}
+
+const initTheme = () => {
+  let saved = ''
+  try {
+    saved = safe(window.localStorage?.getItem('theme'))
+  } catch {
+    saved = ''
   }
 
-  let lenis;
-  if (Lenis && !prefersReducedMotion) {
-    lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
+  const theme = saved === 'dark' || saved === 'light' ? saved : prefersDarkTheme() ? 'dark' : 'light'
+  setTheme(theme)
+
+  const toggle = document.getElementById('theme-toggle')
+  if (!toggle) return
+
+  toggle.addEventListener('click', () => {
+    const next = document.documentElement.classList.contains('dark') ? 'light' : 'dark'
+    setTheme(next)
+  })
+}
+
+const getSkillIconId = (tag) => {
+  const key = safe(tag).toLowerCase().replace(/\s+/g, ' ').trim()
+  const map = {
+    python: 'python',
+    django: 'django',
+    flask: 'flask',
+    fastapi: 'fastapi',
+    celery: 'celery',
+    javascript: 'javascript',
+    html5: 'html',
+    'html/css': 'html',
+    css3: 'css',
+    bootstrap: 'bootstrap',
+    mysql: 'mysql',
+    redis: 'redis',
+    mongodb: 'mongodb',
+    sql: 'postgres',
+    'sql server': 'postgres',
+    sparksql: 'apache',
+    azure: 'azure',
+    docker: 'docker',
+    git: 'git',
+    'power bi': 'powerbi',
+    streamlit: 'streamlit',
+    jupyter: 'jupyter',
+    numpy: 'numpy',
   }
 
-  // ========== Language, Theme & Brightness (load saved prefs first) ==========
-  const savedLang = localStorage.getItem('portfolio-lang') || 'en';
-  let savedTheme = localStorage.getItem('portfolio-theme') || 'petrol-amber';
-  if (savedTheme === 'petrol-coral') {
-    savedTheme = 'petrol-amber';
-    localStorage.setItem('portfolio-theme', savedTheme);
+  if (map[key]) return map[key]
+  if (key.includes('rest')) return 'postman'
+  if (key.includes('etl')) return 'apache'
+  if (key.includes('yolov')) return 'python'
+  if (key.includes('cloudflare')) return 'cloudflare'
+  if (key.includes('typescript')) return 'ts'
+  return 'vscode'
+}
+
+const skillIconUrl = (tag) => {
+  const theme = document?.documentElement?.classList?.contains('dark') ? 'dark' : 'light'
+  return `https://skillicons.dev/icons?i=${getSkillIconId(tag)}&theme=${theme}`
+}
+
+const SVG_NS = 'http://www.w3.org/2000/svg'
+
+const elSvg = (tag, attrs = {}, children = []) => {
+  const node = document.createElementNS(SVG_NS, tag)
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') node.setAttribute('class', v)
+    else if (k === 'style') node.setAttribute('style', v)
+    else if (v !== undefined && v !== null) node.setAttribute(k, String(v))
   }
-  const savedBrightness = parseFloat(localStorage.getItem('portfolio-brightness') || '1');
-
-  document.documentElement.setAttribute('data-theme', savedTheme);
-
-  const brightnessWrapper = document.getElementById('brightness-wrapper');
-  if (brightnessWrapper) brightnessWrapper.style.filter = `brightness(${savedBrightness})`;
-
-  function initProjectCardHover() {
-    if (prefersReducedMotion) return;
-    document.querySelectorAll('.project-card').forEach((card) => {
-      card.addEventListener('mouseenter', () => {
-        gsap.to(card, { scale: 1.02, duration: 0.3, ease: 'power2.out' });
-      });
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, { scale: 1, duration: 0.3, ease: 'power2.out' });
-      });
-    });
+  for (const child of children) {
+    if (child === null || child === undefined) continue
+    node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child)
   }
+  return node
+}
 
-  // ========== Render portfolio content from data ==========
-  function renderPortfolio(lang) {
-    const data = typeof PORTFOLIO !== 'undefined' ? PORTFOLIO : {};
-    const t = typeof translations !== 'undefined' && translations[lang] ? translations[lang] : {};
+const iconSvg = (id) => {
+  const common = 'h-4 w-4 shrink-0'
 
-    // Skills
-    const skillsGrid = document.getElementById('skills-grid');
-    if (skillsGrid && data.skills) {
-      skillsGrid.innerHTML = data.skills.map((cat) => `
-        <div class="skill-category" data-animate>
-          <h3 data-i18n="${cat.i18nKey}">${cat.id}</h3>
-          <div class="skill-tags">${cat.tags.map((tag) => `<span class="skill-tag">${tag}</span>`).join('')}</div>
-        </div>
-      `).join('');
-    }
-
-    // Experience
-    const timeline = document.getElementById('timeline');
-    if (timeline && data.experience) {
-      timeline.innerHTML = data.experience.map((job) => `
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="timeline-date">${job.date}</span>
-            <h3>${job.title}</h3>
-            <h4>${job.company}</h4>
-            <ul>${job.bullets.map((b) => `<li>${b}</li>`).join('')}</ul>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Projects - Categorized grids (SaaS, Websites, Research)
-    const saasGrid = document.getElementById('projects-saas');
-    const websitesGrid = document.getElementById('projects-websites');
-    const researchGrid = document.getElementById('projects-research');
-    if (data.projects) {
-      const renderProjectCard = (id, proj, projectMeta, index) => {
-        const hintI18n = projectMeta.url ? 'projects.visitHint' : 'projects.clickHint';
-        const previewUrl = projectMeta.preview || (projectMeta.url ? `https://s0.wp.com/mshots/v1/${encodeURIComponent(projectMeta.url)}?w=600` : null);
-        const previewHtml = projectMeta.type === 'websites' && previewUrl
-          ? `<div class="project-preview-wrap"><img class="project-preview" src="${previewUrl}" alt="${proj.title}" loading="lazy" onerror="this.style.display='none'"></div>`
-          : '';
-        const badge = projectMeta.type === 'websites' ? '<span class="project-badge" data-i18n="projects.websiteBadge">Website</span>' : (projectMeta.type === 'research' ? '<span class="project-badge" data-i18n="projects.researchBadge">Research</span>' : (projectMeta.type === 'saas' ? '<span class="project-badge" data-i18n="projects.saasBadge">Web App</span>' : ''));
-        const num = String(index + 1).padStart(2, '0');
-        return `
-          <article class="project-card ${projectMeta.type === 'websites' ? 'project-card-website' : ''} ${projectMeta.type === 'research' ? 'project-card-research' : ''} ${projectMeta.type === 'saas' ? 'project-card-saas' : ''}" data-animate data-project="${id}">
-            <span class="project-card-num" aria-hidden="true">${num}</span>
-            <div class="project-card-inner">
-              ${previewHtml}
-              ${badge}
-              <h3>${proj.title}</h3>
-              <p>${proj.summary}</p>
-              <div class="project-tags">${proj.tags.map((tag) => `<span>${tag}</span>`).join('')}</div>
-              <span class="project-card-hint" data-i18n="${hintI18n}">${projectMeta.url ? 'Visit site' : 'Click for details'}</span>
-            </div>
-          </article>
-        `;
-      };
-
-      const saasIds = Object.keys(data.projects).filter((id) => data.projects[id].type === 'saas');
-      const websiteIds = Object.keys(data.projects).filter((id) => data.projects[id].type === 'websites');
-      const researchIds = Object.keys(data.projects).filter((id) => data.projects[id].type === 'research');
-
-      if (saasGrid) {
-        saasGrid.innerHTML = saasIds.map((id, i) => {
-          const proj = data.projects[id][lang] || data.projects[id].en;
-          return renderProjectCard(id, proj, data.projects[id], i);
-        }).join('');
-      }
-      if (websitesGrid) {
-        websitesGrid.innerHTML = websiteIds.map((id, i) => {
-          const proj = data.projects[id][lang] || data.projects[id].en;
-          return renderProjectCard(id, proj, data.projects[id], i);
-        }).join('');
-      }
-      if (researchGrid) {
-        researchGrid.innerHTML = researchIds.map((id, i) => {
-          const proj = data.projects[id][lang] || data.projects[id].en;
-          return renderProjectCard(id, proj, data.projects[id], i);
-        }).join('');
-      }
-    }
-
-    if (typeof applyTranslations === 'function') applyTranslations(lang);
-    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
-    initProjectCardHover();
+  if (id === 'external') {
+    return elSvg(
+      'svg',
+      { class: common, viewBox: '0 0 24 24', fill: 'none', 'aria-hidden': 'true', style: 'color: inherit' },
+      [
+        elSvg('path', {
+          d: 'M14 5h5v5m0-5L10 14',
+          stroke: 'currentColor',
+          'stroke-width': '2',
+          'stroke-linecap': 'round',
+          'stroke-linejoin': 'round',
+        }),
+        elSvg('path', {
+          d: 'M5 10v9a1 1 0 0 0 1 1h9',
+          stroke: 'currentColor',
+          'stroke-width': '2',
+          'stroke-linecap': 'round',
+          'stroke-linejoin': 'round',
+        }),
+      ],
+    )
   }
 
-  renderPortfolio(savedLang);
-  initProjectCardHover();
-
-  // ========== Hero split-letter effect ==========
-  const heroNameEl = document.getElementById('hero-name');
-  if (heroNameEl && !prefersReducedMotion) {
-    const text = heroNameEl.textContent;
-    heroNameEl.innerHTML = '';
-    heroNameEl.setAttribute('aria-label', text);
-    const chars = text.split('');
-    chars.forEach((char) => {
-      const span = document.createElement('span');
-      span.className = 'hero-name-char';
-      span.textContent = char === ' ' ? '\u00A0' : char;
-      span.style.display = char === ' ' ? 'inline' : 'inline-block';
-      heroNameEl.appendChild(span);
-    });
+  if (id === 'github') {
+    return elSvg(
+      'svg',
+      { class: common, viewBox: '0 0 24 24', fill: 'none', 'aria-hidden': 'true', style: 'color: inherit' },
+      [
+        elSvg('path', {
+          d: 'M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.69c-2.77.6-3.35-1.18-3.35-1.18a2.64 2.64 0 0 0-1.1-1.46c-.9-.62.07-.6.07-.6a2.09 2.09 0 0 1 1.52 1.03 2.12 2.12 0 0 0 2.9.83c.05-.53.27-1.02.62-1.42-2.21-.25-4.54-1.1-4.54-4.9 0-1.08.39-1.97 1.03-2.66-.1-.26-.45-1.28.1-2.67 0 0 .84-.27 2.75 1.02a9.47 9.47 0 0 1 5 0c1.9-1.29 2.75-1.02 2.75-1.02.55 1.39.2 2.41.1 2.67.64.69 1.03 1.58 1.03 2.66 0 3.8-2.34 4.65-4.57 4.9.36.31.68.92.68 1.86v2.75c0 .26.18.58.69.48A10 10 0 0 0 12 2Z',
+          fill: 'currentColor',
+        }),
+      ],
+    )
   }
 
-  document.querySelectorAll('.side-nav-btn[data-lang]').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.lang === savedLang);
-    btn.setAttribute('aria-pressed', btn.dataset.lang === savedLang);
-    btn.addEventListener('click', () => {
-      const lang = btn.dataset.lang;
-      localStorage.setItem('portfolio-lang', lang);
-      document.querySelectorAll('.side-nav-btn[data-lang]').forEach((b) => {
-        b.classList.toggle('active', b.dataset.lang === lang);
-        b.setAttribute('aria-pressed', b.dataset.lang === lang);
-      });
-      renderPortfolio(lang);
-    });
-  });
-
-  document.querySelectorAll('.side-nav-btn[data-level]').forEach((btn) => {
-    const level = parseFloat(btn.dataset.level);
-    btn.classList.toggle('active', level === savedBrightness);
-    btn.addEventListener('click', () => {
-      localStorage.setItem('portfolio-brightness', String(level));
-      const wrapper = document.getElementById('brightness-wrapper');
-      if (wrapper) wrapper.style.filter = `brightness(${level})`;
-      document.querySelectorAll('.side-nav-btn[data-level]').forEach((b) => {
-        b.classList.toggle('active', parseFloat(b.dataset.level) === level);
-      });
-    });
-  });
-
-  document.querySelectorAll('.theme-btn').forEach((btn) => {
-    const theme = btn.dataset.theme;
-    btn.classList.toggle('active', theme === savedTheme);
-    btn.setAttribute('aria-pressed', theme === savedTheme);
-    btn.addEventListener('click', () => {
-      localStorage.setItem('portfolio-theme', theme);
-      document.documentElement.setAttribute('data-theme', theme);
-      document.querySelectorAll('.theme-btn').forEach((b) => {
-        b.classList.toggle('active', b.dataset.theme === theme);
-        b.setAttribute('aria-pressed', b.dataset.theme === theme);
-      });
-    });
-  });
-
-  const sections = document.querySelectorAll('.section');
-  const navLinks = document.querySelectorAll('.side-nav-link');
-
-  const updateNavLinks = () => {
-    const scrollPos = (lenis ? lenis.scroll : window.scrollY) + window.innerHeight / 2;
-    let activeSection = 'hero';
-    sections.forEach((section) => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      if (scrollPos >= top && scrollPos < top + height) {
-        activeSection = section.id;
-      }
-    });
-    navLinks.forEach((link) => {
-      link.classList.toggle('active', link.dataset.section === activeSection);
-    });
-  };
-
-  if (lenis) {
-    lenis.on('scroll', updateNavLinks);
-  } else {
-    window.addEventListener('scroll', () => requestAnimationFrame(updateNavLinks));
+  if (id === 'doc') {
+    return elSvg(
+      'svg',
+      { class: common, viewBox: '0 0 24 24', fill: 'none', 'aria-hidden': 'true', style: 'color: inherit' },
+      [
+        elSvg('path', {
+          d: 'M7 3h7l3 3v15a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z',
+          stroke: 'currentColor',
+          'stroke-width': '2',
+          'stroke-linecap': 'round',
+          'stroke-linejoin': 'round',
+        }),
+        elSvg('path', {
+          d: 'M14 3v4h4',
+          stroke: 'currentColor',
+          'stroke-width': '2',
+          'stroke-linecap': 'round',
+          'stroke-linejoin': 'round',
+        }),
+        elSvg('path', {
+          d: 'M9 13h6M9 17h6',
+          stroke: 'currentColor',
+          'stroke-width': '2',
+          'stroke-linecap': 'round',
+          'stroke-linejoin': 'round',
+        }),
+      ],
+    )
   }
-  updateNavLinks();
 
-  // ========== Hero entrance animation ==========
-  // Elements start hidden in CSS to avoid flash before GSAP runs; animate to visible.
-  const heroNameChars = document.querySelectorAll('.hero-name-char');
-  const hasSplitName = heroNameChars.length > 0;
+  return iconSvg('external')
+}
 
-  if (prefersReducedMotion) {
-    gsap.set('.hero-name, .hero-title, .hero-subtitle, .hero-cta .btn, .scroll-hint', { opacity: 1, y: 0 });
-  } else {
-    if (hasSplitName) {
-      gsap.set('.hero-name', { opacity: 1 });
-      gsap.fromTo(heroNameChars, { opacity: 0, y: 24 }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        delay: 0.2,
-        stagger: 0.03,
-        ease: 'power2.out',
-      });
+const el = (tag, attrs = {}, children = []) => {
+  const node = document.createElement(tag)
+
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') node.className = v
+    else if (k === 'text') node.textContent = String(v)
+    else if (k.startsWith('on') && typeof v === 'function') node.addEventListener(k.slice(2).toLowerCase(), v)
+    else if (v !== undefined && v !== null) node.setAttribute(k, String(v))
+  }
+
+  for (const child of children) {
+    if (child === null || child === undefined) continue
+    node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child)
+  }
+
+  return node
+}
+
+const getProjectTypeLabel = (type) => {
+  if (type === 'saas') return 'SaaS / Internal'
+  if (type === 'websites') return 'Client website'
+  if (type === 'research') return 'Research'
+  return safe(type)
+}
+
+const getProjectLinks = (project) => {
+  const links = []
+  if (project.url) links.push({ label: 'Live', href: project.url })
+  if (project.repo && project.repoPublic) links.push({ label: 'Repo', href: project.repo })
+  if (project.publicationUrl) links.push({ label: 'Publication', href: project.publicationUrl })
+  return links
+}
+
+const projectLinkFrom = (project) => {
+  if (project.type === 'websites' && project.url) return { label: 'Live', href: project.url }
+  if (project.repo && project.repoPublic) return { label: 'Repo', href: project.repo }
+  if (project.type === 'research' && project.repo && project.repoPublic) return { label: 'Repo', href: project.repo }
+  return null
+}
+
+const linkIconFor = (label) => {
+  const key = safe(label).toLowerCase()
+  if (key === 'repo') return 'github'
+  if (key === 'publication') return 'doc'
+  return 'external'
+}
+
+const renderLinkButton = (link, title, variant = 'solid') => {
+  const base =
+    'inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500/25'
+  const styles =
+    variant === 'ghost'
+      ? 'bg-slate-50 text-slate-700 ring-1 ring-slate-200 hover:bg-white hover:text-slate-900 dark:bg-slate-800 dark:text-slate-100 dark:ring-slate-700 dark:hover:bg-slate-700'
+      : 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100'
+
+  return el(
+    'a',
+    {
+      class: `${base} ${styles}`,
+      href: link.href,
+      target: '_blank',
+      rel: 'noreferrer',
+      onClick: (e) => e.stopPropagation(),
+      onKeyDown: (e) => e.stopPropagation(),
+      'aria-label': `${link.label} link for ${title}`,
+    },
+    [iconSvg(linkIconFor(link.label)), el('span', { text: link.label })],
+  )
+}
+
+const openProjectModal = (project) => {
+  const modal = document.getElementById('project-modal')
+  if (!modal) return
+
+  const p = project.en || project.el || {}
+  const title = safe(p.title)
+  const summary = safe(p.summary)
+  const description = safe(p.description)
+  const details = Array.isArray(p.details) ? p.details : []
+  const tags = Array.isArray(p.tagsFull) ? p.tagsFull : Array.isArray(p.tags) ? p.tags : []
+  const links = getProjectLinks(project)
+
+  const setText = (id, value) => {
+    const node = document.getElementById(id)
+    if (!node) return
+    node.textContent = value
+  }
+
+  const setHtmlVisibility = (id, isVisible) => {
+    const node = document.getElementById(id)
+    if (!node) return
+    node.classList.toggle('hidden', !isVisible)
+  }
+
+  setText('modal-eyebrow', getProjectTypeLabel(project.type))
+  setText('modal-title', title || 'Project')
+  setText('modal-summary', summary)
+
+  const headerLinks = document.getElementById('modal-header-links')
+  if (headerLinks) {
+    headerLinks.innerHTML = ''
+    links.slice(0, 3).forEach((l) => headerLinks.appendChild(renderLinkButton(l, title, 'ghost')))
+  }
+
+  const descNode = document.getElementById('modal-description')
+  if (descNode) descNode.textContent = description
+  setHtmlVisibility('modal-description', Boolean(description))
+
+  const mediaRoot = document.getElementById('modal-media')
+  if (mediaRoot) {
+    mediaRoot.innerHTML = ''
+    if (project.image) {
+      const img = el('img', {
+        src: project.image,
+        alt: `${title} preview`,
+        class: 'h-full w-full object-cover object-top',
+        loading: 'lazy',
+      })
+      img.onerror = () => img.remove()
+      mediaRoot.appendChild(el('div', { class: 'aspect-[16/9] bg-slate-50' }, [img]))
+      mediaRoot.classList.remove('hidden')
     } else {
-      gsap.to('.hero-name', {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        delay: 0.2,
-        ease: 'power2.out',
-        startAt: { opacity: 0, y: 30 },
-      });
+      mediaRoot.classList.add('hidden')
     }
-    gsap.to('.hero-title, .hero-subtitle', {
-      opacity: 1,
-      y: 0,
-      duration: 0.7,
-      delay: hasSplitName ? 0.7 : 0.5,
-      stagger: 0.15,
-      ease: 'power2.out',
-      startAt: { opacity: 0, y: 24 },
-    });
-    gsap.to('.hero-cta .btn', {
-      opacity: 1,
-      y: 0,
-      duration: 0.5,
-      delay: 0.9,
-      stagger: 0.08,
-      ease: 'power2.out',
-      startAt: { opacity: 0, y: 20 },
-    });
-    gsap.to('.scroll-hint', {
-      opacity: 1,
-      duration: 0.5,
-      delay: 1.3,
-      ease: 'power2.out',
-    });
   }
 
-  // ========== Section entrance animations (ScrollTrigger) ==========
-  if (!prefersReducedMotion) {
-    gsap.utils.toArray('[data-animate]').forEach((el) => {
-      gsap.from(el, {
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 92%',
-          toggleActions: 'play none none reverse',
-        },
-        y: 28,
-        duration: 0.6,
-        ease: 'power2.out',
-      });
-    });
-
-    gsap.utils.toArray('.skill-category').forEach((category) => {
-      const tags = category.querySelectorAll('.skill-tag');
-      if (tags.length) {
-        gsap.from(tags, {
-          scrollTrigger: {
-            trigger: category,
-            start: 'top 92%',
-            toggleActions: 'play none none reverse',
-          },
-          y: 12,
-          duration: 0.35,
-          stagger: 0.03,
-          ease: 'power2.out',
-        });
-      }
-    });
-
-    gsap.utils.toArray('.project-card').forEach((card, i) => {
-      gsap.from(card, {
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 95%',
-          toggleActions: 'play none none reverse',
-        },
-        y: 28,
-        duration: 0.5,
-        delay: i * 0.05,
-        ease: 'power2.out',
-      });
-    });
-
-    gsap.utils.toArray('.stat-card').forEach((card, i) => {
-      gsap.from(card, {
-        scrollTrigger: {
-          trigger: card.closest('.section-stats'),
-          start: 'top 90%',
-          toggleActions: 'play none none reverse',
-        },
-        y: 20,
-        opacity: 0,
-        duration: 0.5,
-        delay: i * 0.08,
-        ease: 'power2.out',
-      });
-    });
+  setHtmlVisibility('modal-details', details.length > 0)
+  const detailsList = document.getElementById('modal-details-list')
+  if (detailsList) {
+    detailsList.innerHTML = ''
+    details.slice(0, 8).forEach((d) => {
+      detailsList.appendChild(
+        el('li', { class: 'flex items-start gap-2' }, [
+          el('span', { class: 'mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500' }),
+          el('span', { text: d }),
+        ]),
+      )
+    })
   }
 
-  // ========== Stats counter animation ==========
-  if (!prefersReducedMotion) {
-    document.querySelectorAll('.stat-value[data-stat]').forEach((el) => {
-      const target = parseInt(el.dataset.stat, 10);
-      const obj = { val: 0 };
-      ScrollTrigger.create({
-        trigger: el.closest('.section-stats'),
-        start: 'top 85%',
-        onEnter: () => {
-          gsap.to(obj, {
-            val: target,
-            duration: 1.2,
-            ease: 'power2.out',
-            onUpdate: () => {
-              el.textContent = Math.round(obj.val);
-            },
-          });
-        },
-        once: true,
-      });
-    });
-  } else {
-    document.querySelectorAll('.stat-value[data-stat]').forEach((el) => {
-      el.textContent = el.dataset.stat;
-    });
+  setHtmlVisibility('modal-tags', tags.length > 0)
+  const tagsList = document.getElementById('modal-tags-list')
+  if (tagsList) {
+    tagsList.innerHTML = ''
+    tags.slice(0, 16).forEach((t) => {
+      tagsList.appendChild(
+        el('span', {
+          class:
+            'rounded-full bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:ring-slate-700',
+          text: t,
+        }),
+      )
+    })
   }
 
-  // ========== Scroll progress bar ==========
-  const scrollProgress = document.querySelector('.scroll-progress');
-  if (scrollProgress) {
-    ScrollTrigger.create({
-      trigger: 'body',
-      start: 'top top',
-      end: 'bottom bottom',
-      onUpdate: (self) => {
-        scrollProgress.style.width = `${self.progress * 100}%`;
+  if (typeof modal.showModal === 'function') modal.showModal()
+}
+
+const renderProjectCard = (project) => {
+  const p = project.en || project.el || {}
+  const title = safe(p.title)
+  const summary = safe(p.summary)
+  const tags = Array.isArray(p.tags) ? p.tags.slice(0, 6) : []
+  const link = projectLinkFrom(project)
+  const links = getProjectLinks(project)
+  const publicationUrl = safe(project.publicationUrl)
+  const publicationPreviewText = safe(project.publicationPreviewText)
+
+  return el(
+    'article',
+    {
+      class:
+        'reveal group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-teal-500/25 dark:bg-slate-900 dark:ring-slate-700',
+      role: 'button',
+      tabIndex: 0,
+      onClick: () => openProjectModal(project),
+      onKeyDown: (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return
+        e.preventDefault()
+        openProjectModal(project)
       },
-    });
-  }
-
-  // ========== Smooth scroll for anchor links (including skip link) ==========
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    const targetId = anchor.getAttribute('href').slice(1);
-    if (!targetId) return;
-    anchor.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = document.getElementById(targetId);
-      if (target) {
-        if (lenis) {
-          lenis.scrollTo(target, { offset: 0, duration: 1.2 });
-        } else {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }
-    });
-  });
-
-  // ========== Project Modal (uses PORTFOLIO.projects from js/data/portfolio.js) ==========
-  const projectData = typeof PORTFOLIO !== 'undefined' ? PORTFOLIO.projects : {};
-
-  const modal = document.getElementById('project-modal');
-  const modalTitle = modal?.querySelector('.modal-title');
-  const modalHeaderActions = document.getElementById('modal-header-actions');
-  const modalBody = modal?.querySelector('.modal-body');
-  const modalFooter = modal?.querySelector('.modal-footer');
-
-  function openModal(projectId) {
-    const proj = projectData[projectId];
-    if (!proj || !modal) return;
-    const lang = localStorage.getItem('portfolio-lang') || 'en';
-    const data = proj[lang] || proj.en;
-    const tags = data.tagsFull || data.tags || [];
-    const visitText = lang === 'el' ? 'Επίσκεψη ιστοσελίδας' : 'Visit website';
-    const isWebsite = !!proj.url;
-
-    const previewUrl = proj.preview || (proj.url ? `https://s0.wp.com/mshots/v1/${encodeURIComponent(proj.url)}?w=800` : null);
-    const previewHtml = previewUrl
-      ? `<div class="modal-preview-wrap"><img class="modal-preview" src="${previewUrl}" alt="${data.title}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
-      : '';
-
-    modal.classList.toggle('modal-website', isWebsite);
-    modalTitle.textContent = data.title;
-
-    const externalLinkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
-    const codeText = lang === 'el' ? 'Κώδικας (GitHub)' : 'View code';
-    const githubSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>`;
-    if (modalHeaderActions) {
-      const links = [];
-      if (isWebsite) links.push(`<a href="${proj.url}" target="_blank" rel="noopener noreferrer" class="modal-external-link" aria-label="${visitText}" title="${visitText}">${externalLinkSvg}</a>`);
-      if (proj.repo && proj.repoPublic) links.push(`<a href="${proj.repo}" target="_blank" rel="noopener noreferrer" class="modal-external-link" aria-label="${codeText}" title="${codeText}">${githubSvg}</a>`);
-      modalHeaderActions.innerHTML = links.join('');
-    }
-
-    if (isWebsite) {
-      modalBody.innerHTML = `
-        ${previewHtml}
-        <div class="modal-website-content">
-          <p>${data.description}</p>
-          <ul>${(data.details || []).map((d) => `<li>${d}</li>`).join('')}</ul>
-          <div class="modal-tags">${tags.map((t) => `<span>${t}</span>`).join('')}</div>
-        </div>
-      `;
-    } else {
-      modalBody.innerHTML = `
-        <p>${data.description}</p>
-        <ul>${(data.details || []).map((d) => `<li>${d}</li>`).join('')}</ul>
-        <div class="modal-tags">${tags.map((t) => `<span>${t}</span>`).join('')}</div>
-      `;
-    }
-    modalFooter.innerHTML = '';
-
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    if (lenis) lenis.stop();
-  }
-
-  function closeModal() {
-    modal?.classList.remove('is-open');
-    modal?.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    if (lenis) lenis.start();
-  }
-
-  document.getElementById('projects')?.addEventListener('click', (e) => {
-    const card = e.target.closest('.project-card');
-    if (!card || e.target.closest('a')) return;
-    const id = card.dataset.project;
-    if (id) openModal(id);
-  });
-
-  modal?.querySelector('.modal-close')?.addEventListener('click', closeModal);
-  modal?.querySelector('.modal-backdrop')?.addEventListener('click', closeModal);
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal?.classList.contains('is-open')) closeModal();
-  });
-
-  // ========== Nav overlay toggle (mobile & tablet) ==========
-  const navToggle = document.getElementById('nav-toggle');
-  const navPanel = document.getElementById('nav-panel');
-  const navBackdrop = document.getElementById('nav-backdrop');
-  const navClose = document.getElementById('nav-close');
-
-  function openNav() {
-    navPanel?.classList.add('is-open');
-    navBackdrop?.classList.add('is-visible');
-    navToggle?.setAttribute('aria-expanded', 'true');
-    navBackdrop?.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeNav() {
-    navPanel?.classList.remove('is-open');
-    navBackdrop?.classList.remove('is-visible');
-    navToggle?.setAttribute('aria-expanded', 'false');
-    navBackdrop?.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  navToggle?.addEventListener('click', () => {
-    if (navPanel?.classList.contains('is-open')) closeNav();
-    else openNav();
-  });
-
-  navClose?.addEventListener('click', closeNav);
-  navBackdrop?.addEventListener('click', closeNav);
-
-  navPanel?.querySelectorAll('.side-nav-link').forEach((link) => {
-    link.addEventListener('click', closeNav);
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && navPanel?.classList.contains('is-open')) closeNav();
-  });
-
-  // ========== Copy email ==========
-  document.querySelectorAll('.contact-copy').forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      const email = btn.dataset.email;
-      const textEl = btn.querySelector('.contact-copy-text');
-      const copiedText = typeof translations !== 'undefined'
-        ? (translations[localStorage.getItem('portfolio-lang') || 'en']?.contact?.copied || 'Copied!')
-        : 'Copied!';
-      if (!email) return;
-      try {
-        await navigator.clipboard.writeText(email);
-        const orig = textEl?.textContent;
-        if (textEl) textEl.textContent = copiedText;
-        btn.classList.add('copied');
-        setTimeout(() => {
-          if (textEl) textEl.textContent = orig || 'Copy';
-          btn.classList.remove('copied');
-        }, 2000);
-      } catch (_) {
-        window.location.href = `mailto:${email}`;
-      }
-    });
-  });
-
-  window.addEventListener('resize', () => ScrollTrigger.refresh());
+      'aria-label': `Open details for ${title || 'project'}`,
+    },
+    [
+      project.image
+        ? (() => {
+            const img = el('img', {
+              src: project.image,
+              alt: `${title} preview`,
+              class: 'h-full w-full object-cover object-top',
+              loading: 'lazy',
+            })
+            img.onerror = () => img.remove()
+            return el('div', { class: 'aspect-[16/9] bg-slate-50 dark:bg-slate-800' }, [img])
+          })()
+        : null,
+      el('div', { class: 'p-5' }, [
+        el('div', { class: 'flex items-start justify-between gap-3' }, [
+          el('h4', { class: 'text-base font-semibold tracking-tight text-slate-900 dark:text-white', text: title || 'Project' }),
+          link ? renderLinkButton(link, title, 'ghost') : null,
+        ]),
+        publicationUrl
+          ? el(
+              'a',
+              {
+                class:
+                  'mt-4 block rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200 hover:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:bg-slate-800 dark:ring-slate-700 dark:hover:bg-slate-700',
+                href: publicationUrl,
+                target: '_blank',
+                rel: 'noreferrer',
+                onClick: (e) => e.stopPropagation(),
+                onKeyDown: (e) => e.stopPropagation(),
+                'aria-label': `Open publication for ${title}`,
+              },
+              [
+                el('div', { class: 'flex items-start justify-between gap-3' }, [
+                  el('div', { class: 'flex items-center gap-2' }, [
+                    el('div', { class: 'text-slate-700 dark:text-slate-100' }, [iconSvg('doc')]),
+                    el('div', { class: 'text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400', text: 'Publication' }),
+                  ]),
+                  el('div', { class: 'text-slate-500 dark:text-slate-400' }, [iconSvg('external')]),
+                ]),
+                el('div', {
+                  class: 'mt-1 text-sm font-semibold text-slate-900 dark:text-white',
+                  text: 'Optimization techniques for HConVRP',
+                }),
+                el('div', { class: 'mt-0.5 text-xs text-slate-600 dark:text-slate-300', text: 'doi.org/10.26219/heal.aueb.360' }),
+                publicationPreviewText
+                  ? el('div', { class: 'mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300', text: publicationPreviewText })
+                  : null,
+              ],
+            )
+          : null,
+        el('p', { class: 'mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-200', text: summary }),
+        links.length
+          ? el(
+              'div',
+              { class: 'mt-4 flex flex-wrap gap-2' },
+              links
+                .slice(0, 3)
+                .map((l) => el('div', { class: 'pointer-events-auto' }, [renderLinkButton(l, title, 'ghost')])),
+            )
+          : null,
+        tags.length
+          ? el(
+              'div',
+              { class: 'mt-4 flex flex-wrap gap-2' },
+              tags.map((t) =>
+                el('span', {
+                  class:
+                    'rounded-full bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:ring-slate-700',
+                  text: t,
+                }),
+              ),
+            )
+          : null,
+      ]),
+    ],
+  )
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => init());
-} else {
-  init();
+const renderExperienceItem = (job) => {
+  const bullets = Array.isArray(job.bullets) ? job.bullets : []
+
+  return el(
+    'li',
+    { class: 'reveal rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700' },
+    [
+      el('div', { class: 'flex flex-wrap items-center justify-between gap-2' }, [
+        el('div', { class: 'text-sm font-semibold text-slate-900 dark:text-white', text: safe(job.title) }),
+        el('div', { class: 'text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400', text: safe(job.date) }),
+      ]),
+      el('div', { class: 'mt-1 text-sm font-medium text-slate-700 dark:text-slate-200', text: safe(job.company) }),
+      bullets.length
+        ? el(
+            'ul',
+            { class: 'mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300' },
+            bullets.slice(0, 4).map((b) =>
+              el('li', { class: 'flex items-start gap-2' }, [
+                el('span', { class: 'mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500' }),
+                el('span', { text: b }),
+              ]),
+            ),
+          )
+        : null,
+    ],
+  )
 }
+
+const renderSkillGroup = (group) => {
+  const tags = Array.isArray(group.tags) ? group.tags : []
+  const label = group.id ? group.id : 'Skills'
+
+  const labelText =
+    label === 'backend'
+      ? 'Backend'
+      : label === 'frontend'
+        ? 'Frontend'
+        : label === 'databases'
+          ? 'Databases'
+          : label === 'analytics'
+            ? 'Analytics'
+            : label === 'devops'
+              ? 'DevOps'
+              : String(label)
+
+  return el('div', { class: 'reveal rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700' }, [
+    el('div', { class: 'flex items-center justify-between gap-3' }, [
+      el('h3', { class: 'text-sm font-semibold text-slate-900 dark:text-white', text: labelText }),
+      el('span', { class: 'text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400', text: `${tags.length} items` }),
+    ]),
+    el(
+      'div',
+      { class: 'mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2' },
+      tags.map((t) =>
+        el(
+          'div',
+          {
+            class:
+              'flex items-center gap-2 rounded-2xl bg-slate-50 px-3 py-2 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700',
+          },
+          [
+            el('img', {
+              src: skillIconUrl(t),
+              alt: '',
+              class: 'h-5 w-5 shrink-0',
+              loading: 'lazy',
+              width: 20,
+              height: 20,
+            }),
+            el('span', { class: 'text-xs font-semibold text-slate-700 dark:text-slate-100', text: t }),
+          ],
+        ),
+      ),
+    ),
+  ])
+}
+
+const normalizeProjects = (portfolio) => {
+  if (!portfolio?.projects) return []
+  return Object.values(portfolio.projects)
+}
+
+const applyLinks = () => {
+  const setHref = (id, href) => {
+    const a = document.getElementById(id)
+    if (!a) return
+    a.setAttribute('href', href)
+  }
+
+  setHref('contact-email', PROFILE.links.email)
+  setHref('contact-linkedin', PROFILE.links.linkedin)
+  setHref('contact-github', PROFILE.links.github)
+
+  setHref('cv-dev', PROFILE.cv.dev)
+  setHref('cv-ba', PROFILE.cv.ba)
+  setHref('contact-cv-dev', PROFILE.cv.dev)
+  setHref('contact-cv-ba', PROFILE.cv.ba)
+}
+
+const renderAll = () => {
+  const projects = normalizeProjects(PORTFOLIO)
+
+  const saas = byType(projects, 'saas')
+  const websites = byType(projects, 'websites')
+  const research = byType(projects, 'research')
+
+  const saasRoot = document.getElementById('work-saas')
+  const websitesRoot = document.getElementById('work-websites')
+  const researchRoot = document.getElementById('work-research')
+
+  if (saasRoot) saas.forEach((p) => saasRoot.appendChild(renderProjectCard(p)))
+  if (websitesRoot) websites.forEach((p) => websitesRoot.appendChild(renderProjectCard(p)))
+  if (researchRoot) research.forEach((p) => researchRoot.appendChild(renderProjectCard(p)))
+
+  const experienceRoot = document.getElementById('experience-list')
+  if (experienceRoot) PORTFOLIO.experience.forEach((j) => experienceRoot.appendChild(renderExperienceItem(j)))
+
+  const skillsRoot = document.getElementById('skills-grid')
+  if (skillsRoot) PORTFOLIO.skills.forEach((g) => skillsRoot.appendChild(renderSkillGroup(g)))
+
+  const year = document.getElementById('year')
+  if (year) year.textContent = String(new Date().getFullYear())
+}
+
+const initScrollAnimations = () => {
+  if (!window.gsap || !window.ScrollTrigger) return
+
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (prefersReduced) return
+
+  window.gsap.registerPlugin(window.ScrollTrigger)
+
+  const rootScroller = document.getElementById('scroll-root')
+
+  const revealTargets = Array.from(document.querySelectorAll('.reveal'))
+  if (!revealTargets.length) return
+
+  revealTargets.forEach((target) => {
+    window.gsap.fromTo(
+      target,
+      { opacity: 0, y: 26 },
+      {
+        opacity: 1,
+        y: 0,
+        ease: 'power2.out',
+        duration: 0.9,
+        scrollTrigger: {
+          trigger: target,
+          start: 'top 86%',
+          end: 'top 60%',
+          scrub: 1,
+          scroller: rootScroller || undefined,
+        },
+      },
+    )
+  })
+}
+
+const initModalDismiss = () => {
+  const modal = document.getElementById('project-modal')
+  if (!modal) return
+
+  modal.addEventListener('click', (e) => {
+    if (e.target !== modal) return
+    try {
+      modal.close()
+    } catch {
+      // ignore
+    }
+  })
+}
+
+const boot = () => {
+  initTheme()
+  applyLinks()
+  renderAll()
+  initScrollAnimations()
+  initModalDismiss()
+
+  initHeroThreeBackground('hero-canvas')
+}
+
+document.addEventListener('DOMContentLoaded', boot)
+
