@@ -111,6 +111,26 @@ const PROJECTS = [
     tech: ['Python', 'Flask', 'WebSockets', 'Pandas', 'NumPy', 'scikit-learn'],
     links: [{ label: 'Repo', href: 'https://github.com/Lefyd24/HConVRP' }],
   },
+  {
+    id: 'forest_fire_smoke_detection',
+    category: 'public_research',
+    featured: true,
+    title: 'Forest Fire & Smoke Detection',
+    whatItIs: 'MSc project for Business Analytics at AUEB using YOLOv8 and YOLOv7 for real-time forest fire and smoke detection in images and videos.',
+    problem: 'Demonstrates object detection for early fire/smoke identification, with comparative inference-time analysis between the two models.',
+    built: [
+      'Trained YOLOv8 and YOLOv7 on Fire Image Dataset V2 (Roboflow) with identical parameters on Google Colab (T4 GPU)',
+      'Serverless Streamlit app for interactive inference on images and videos',
+      'Comparative inference-time benchmarks across 2,750 test images',
+      'Jupyter notebooks for training and inference; detailed project report',
+    ],
+    tech: ['Python', 'YOLOv8', 'YOLOv7', 'Streamlit', 'Jupyter', 'Roboflow', 'Google Colab'],
+    links: [
+      { label: 'Live demo', href: 'https://forestfiresmokedetection.streamlit.app/' },
+      { label: 'Repo', href: 'https://github.com/Lefyd24/Forest-Fire-Smoke-Detection' },
+    ],
+    cardImage: 'https://github.com/Lefyd24/Forest-Fire-Smoke-Detection/raw/main/preview_predictions/processed_video.gif',
+  },
 ];
 
 const EXPERIENCE = [
@@ -120,7 +140,7 @@ const EXPERIENCE = [
     company: 'Mitsis Group',
     bullets: [
       'Lead development of Python-based enterprise applications for financial process automation',
-      'Design and deploy Django/Flask web applications for cross-departmental workflow optimization',
+      'Design and deploy Django/FastAPI/Flask web applications for cross-departmental workflow optimization',
       'Architect SQL databases and data pipelines supporting business intelligence initiatives',
     ],
   },
@@ -159,7 +179,7 @@ const EXPERIENCE = [
 
 const SKILLS = [
   { id: 'backend', label: 'Backend', tags: ['Python', 'Django', 'Flask', 'FastAPI', 'Celery', 'REST APIs', 'ETL'] },
-  { id: 'frontend', label: 'Frontend', tags: ['JavaScript', 'HTML5', 'CSS3', 'Bootstrap'] },
+  { id: 'frontend', label: 'Frontend', tags: ['JavaScript', 'HTML5', 'CSS3', 'Tailwind', 'DaisyUI', 'Bootstrap'] },
   { id: 'databases', label: 'Databases', tags: ['SQL Server', 'MySQL', 'Redis', 'MongoDB', 'SparkSQL'] },
   { id: 'analytics', label: 'Analytics', tags: ['Power BI', 'Advanced Excel', 'Qlik Sense', 'SAS'] },
   { id: 'devops', label: 'DevOps', tags: ['Azure', 'Git', 'Docker', 'Power Automate'] },
@@ -176,6 +196,8 @@ const SKILL_ICONS = {
   javascript: 'javascript',
   html5: 'html',
   css3: 'css',
+  tailwind: 'tailwind',
+  daisyui: 'daisyui',
   bootstrap: 'bootstrap',
   'sql server': 'postgres',
   mysql: 'mysql',
@@ -192,11 +214,39 @@ const SKILL_ICONS = {
   'power automate': 'azure',
 };
 
+const SECTION_CONFIG = {
+  internal_saas: { id: 'saas', gridId: 'projects-grid-saas', label: 'SaaS Projects' },
+  public_website: { id: 'websites', gridId: 'projects-grid-websites', label: 'Client Websites' },
+  public_research: { id: 'research', gridId: 'projects-grid-research', label: 'Research' },
+};
+
 function categoryLabel(c) {
   if (c === 'internal_saas') return 'Internal SaaS';
   if (c === 'public_website') return 'Websites';
   if (c === 'public_research') return 'Research';
   return c;
+}
+
+function getProjectSiteUrl(project) {
+  if (project.category !== 'public_website' || !project.links?.length) return null;
+  const live = project.links.find((l) => /live|site|website|visit|demo/i.test(l.label || ''));
+  return live?.href || project.links[0]?.href || null;
+}
+
+async function fetchScreenshotUrl(siteUrl) {
+  try {
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch(
+      `https://api.microlink.io/?url=${encodeURIComponent(siteUrl)}&screenshot=true&meta=false`,
+      { signal: ctrl.signal },
+    );
+    clearTimeout(timeout);
+    const data = await res.json();
+    return data?.data?.screenshot?.url || null;
+  } catch {
+    return null;
+  }
 }
 
 function compactTech(tech) {
@@ -229,8 +279,27 @@ function setTheme(theme) {
   document.getElementById('theme-light')?.setAttribute('aria-pressed', String(!isDark));
 }
 
+function initOverviewPage() {
+  const tabDev = document.getElementById('tab-developer');
+  const tabAnalyst = document.getElementById('tab-analyst');
+  const contentDev = document.getElementById('overview-developer-content');
+  const contentAnalyst = document.getElementById('overview-analyst-content');
+  if (!tabDev || !tabAnalyst || !contentDev || !contentAnalyst) return;
+
+  const show = (role) => {
+    const isDev = role === 'developer';
+    tabDev.classList.toggle('tab-active', isDev);
+    tabAnalyst.classList.toggle('tab-active', !isDev);
+    contentDev.classList.toggle('hidden', !isDev);
+    contentAnalyst.classList.toggle('hidden', isDev);
+  };
+
+  tabDev.addEventListener('click', () => show('developer'));
+  tabAnalyst.addEventListener('click', () => show('analyst'));
+}
+
 const ROUTES = {
-  overview: { file: 'overview.html', title: 'Home', init: null },
+  overview: { file: 'overview.html', title: 'Home', init: initOverviewPage },
   projects: { file: 'projects.html', title: 'Projects', init: initProjectsPage },
   experience: { file: 'experience.html', title: 'Experience', init: () => { renderExperience(); } },
   skills: { file: 'skills.html', title: 'Skills', init: () => { renderSkills(); } },
@@ -246,18 +315,24 @@ function getRouteFromHash() {
   return VALID_ROUTES.includes(hash) ? hash : DEFAULT_ROUTE;
 }
 
-function showLoader() {
+let isInitialLoad = true;
+
+function showLoader(routeTitle) {
   const el = document.getElementById('page-loader');
+  const titleEl = document.getElementById('loader-route-title');
   if (el) {
-    el.classList.remove('hidden');
+    el.classList.add('page-loader-visible');
     el.setAttribute('aria-busy', 'true');
+  }
+  if (titleEl && routeTitle) {
+    titleEl.textContent = routeTitle;
   }
 }
 
 function hideLoader() {
   const el = document.getElementById('page-loader');
   if (el) {
-    el.classList.add('hidden');
+    el.classList.remove('page-loader-visible');
     el.setAttribute('aria-busy', 'false');
   }
 }
@@ -267,17 +342,22 @@ async function loadPage(routeId) {
   const config = ROUTES[routeId];
   if (!content || !config) return;
 
-  showLoader();
+  const showLoaderForNavigation = !isInitialLoad;
+  if (isInitialLoad) isInitialLoad = false;
+
+  if (showLoaderForNavigation) showLoader(config.title);
+
   try {
     const res = await fetch(`./sections/${config.file}`, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`Failed to load: ${config.file}`);
     content.innerHTML = await res.text();
     if (typeof config.init === 'function') config.init();
   } catch (err) {
-    content.innerHTML = '<div class="alert alert-error"><span>This page could not be loaded. Serve the site from a local server (e.g. <code>npx serve public</code>) and try again.</span></div>';
+    content.innerHTML =
+      '<div class="alert alert-error"><span>This page could not be loaded. Serve the site from a local server (e.g. <code>npx serve public</code>) and try again.</span></div>';
     console.error(err);
   } finally {
-    hideLoader();
+    if (showLoaderForNavigation) hideLoader();
   }
 
   updateBreadcrumb(config.title);
@@ -368,27 +448,41 @@ function renderExperience() {
   if (!root) return;
   root.innerHTML = '';
 
+  const container = el('div', {
+    class: 'relative border-l-2 border-primary/20 pl-8 sm:pl-10 ml-2 sm:ml-3',
+  }, []);
+
   for (const job of EXPERIENCE) {
-    const li = el('li', {}, [
-      el('div', { class: 'timeline-middle' }, [el('div', { class: 'h-3 w-3 rounded-full bg-primary' })]),
-      el('div', { class: 'timeline-end mb-8' }, [
-        el('div', { class: 'flex flex-col gap-1' }, [
-          el('div', { class: 'text-sm opacity-70', text: job.date }),
-          el('div', { class: 'text-lg font-semibold', text: job.title }),
-          el('div', { class: 'font-medium opacity-90', text: job.company }),
+    const card = el('div', {
+      class: 'card bg-base-100 border border-base-300 rounded-xl shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/20',
+    }, [
+      el('div', { class: 'card-body p-5 sm:p-6' }, [
+        el('div', { class: 'mb-3' }, [
+          el('span', { class: 'inline-block rounded-lg bg-primary/15 px-3 py-1.5 text-sm font-medium text-primary', text: job.date }),
         ]),
+        el('h3', { class: 'text-lg font-semibold text-base-content', text: job.title }),
+        el('div', { class: 'text-base font-medium opacity-80', text: job.company }),
         el(
           'ul',
-          { class: 'mt-3 space-y-2' },
+          { class: 'mt-4 space-y-2.5' },
           job.bullets.map((b) =>
-            el('li', { class: 'flex items-start gap-2' }, [el('span', { class: 'mt-2 inline-block h-1.5 w-1.5 rounded-full bg-base-content/50' }), el('span', { class: 'opacity-90', text: b })]),
+            el('li', { class: 'flex items-start gap-3' }, [
+              el('span', { class: 'mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary' }),
+              el('span', { class: 'text-sm opacity-90 leading-relaxed', text: b }),
+            ]),
           ),
         ),
       ]),
-      el('hr'),
     ]);
-    root.appendChild(li);
+
+    const item = el('div', { class: 'relative pb-8 last:pb-0' }, [
+      el('div', { class: 'absolute -left-[2.125rem] sm:-left-[2.5rem] top-6 h-3 w-3 rounded-full bg-primary ring-4 ring-base-100' }),
+      card,
+    ]);
+    container.appendChild(item);
   }
+
+  root.appendChild(container);
 }
 
 function openProjectModal(project) {
@@ -402,10 +496,47 @@ function openProjectModal(project) {
   links.innerHTML = '';
   body.innerHTML = '';
 
-  const chip = el('span', { class: 'badge badge-outline', text: categoryLabel(project.category) });
-  links.appendChild(chip);
+  const categoryBadge = el('span', {
+    class: 'badge badge-sm font-medium ' + categoryStyles(project.category).badge,
+    text: categoryLabel(project.category),
+  });
+  links.appendChild(categoryBadge);
+
+  const ghPath =
+    'M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z';
+  const extPath = 'M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14';
+
   for (const l of project.links || []) {
-    links.appendChild(el('a', { class: 'badge badge-primary badge-outline', href: l.href, target: '_blank', rel: 'noreferrer', text: l.label }));
+    const isRepo = /repo|github|code/i.test(l.label || '');
+    const iconEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    iconEl.setAttribute('class', 'h-4 w-4 shrink-0');
+    iconEl.setAttribute('viewBox', '0 0 24 24');
+    if (isRepo) {
+      iconEl.setAttribute('fill', 'currentColor');
+      iconEl.innerHTML = `<path fill-rule="evenodd" d="${ghPath}" clip-rule="evenodd"/>`;
+    } else {
+      iconEl.setAttribute('fill', 'none');
+      iconEl.setAttribute('stroke', 'currentColor');
+      iconEl.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>';
+    }
+    const extIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    extIcon.setAttribute('class', 'h-3.5 w-3.5 opacity-60');
+    extIcon.setAttribute('fill', 'none');
+    extIcon.setAttribute('stroke', 'currentColor');
+    extIcon.setAttribute('viewBox', '0 0 24 24');
+    extIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>';
+
+    const linkEl = el(
+      'a',
+      {
+        class: 'inline-flex items-center gap-2 rounded-lg border border-base-300 bg-base-200/80 px-3 py-2 text-sm font-medium hover:bg-base-300/80 hover:border-primary/40 transition-colors',
+        href: l.href,
+        target: '_blank',
+        rel: 'noreferrer',
+      },
+      [iconEl, el('span', { text: l.label }), extIcon],
+    );
+    links.appendChild(linkEl);
   }
 
   body.appendChild(el('div', {}, [el('div', { class: 'text-xs uppercase tracking-wide opacity-70', text: 'What it is' }), el('div', { class: 'mt-1 font-medium', text: project.whatItIs })]));
@@ -419,7 +550,7 @@ function openProjectModal(project) {
   body.appendChild(
     el('div', {}, [
       el('div', { class: 'text-xs uppercase tracking-wide opacity-70', text: 'Tech' }),
-      el('div', { class: 'mt-2 flex flex-wrap gap-2' }, project.tech.map((t) => el('span', { class: 'badge badge-ghost', text: t }))),
+      el('div', { class: 'mt-2 flex flex-wrap gap-2' }, project.tech.map((t) => el('span', { class: 'badge badge-ghost badge-sm px-3 py-1.5 rounded-lg font-medium', text: t }))),
     ]),
   );
 
@@ -437,22 +568,48 @@ function buildProjectCard(p) {
   const styles = categoryStyles(p.category);
   const isFeatured = !!p.featured;
   const tech = compactTech(p.tech || []);
+  const siteUrl = getProjectSiteUrl(p);
+  const cardImage = p.cardImage;
 
-  const mediaClass = 'aspect-[4/3] w-full bg-gradient-to-br ' + styles.media + ' flex items-center justify-center relative';
+  const mediaClass = 'aspect-[7/3] w-full bg-gradient-to-br ' + styles.media + ' flex items-center justify-center relative overflow-hidden';
   const cardClass =
     'card bg-base-100 border border-base-300 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer group flex flex-col';
 
-  const productMedia = el('div', { class: mediaClass }, [
-    el('div', { class: 'text-5xl sm:text-6xl font-bold text-base-content/10 select-none', text: p.title.charAt(0) }),
-    ...(isFeatured
-      ? [
-          el('div', {
-            class: 'absolute top-3 right-3 badge badge-warning badge-sm shadow',
-            text: 'Featured',
-          }),
-        ]
-      : []),
+  const placeholderContent = el('div', { class: 'text-5xl sm:text-6xl font-bold text-base-content/10 select-none snapshot-placeholder', text: p.title.charAt(0) });
+  const mediaAttrs = { class: mediaClass };
+  if (siteUrl) mediaAttrs['data-site-url'] = siteUrl;
+
+  const productMedia = el('div', mediaAttrs, [
+    placeholderContent,
+    ...(isFeatured ? [el('div', { class: 'absolute top-3 right-3 badge badge-warning badge-sm shadow', text: 'Featured' })] : []),
   ]);
+
+  if (cardImage) {
+    const img = el('img', {
+      src: cardImage,
+      alt: `${p.title} preview`,
+      class: 'w-full h-full object-cover object-center absolute inset-0',
+      loading: 'lazy',
+    });
+    img.onerror = () => img.remove();
+    const placeholder = productMedia.querySelector('.snapshot-placeholder');
+    if (placeholder) placeholder.remove();
+    productMedia.insertBefore(img, productMedia.firstChild);
+  } else if (siteUrl) {
+    fetchScreenshotUrl(siteUrl).then((screenshotUrl) => {
+      if (!screenshotUrl) return;
+      const img = el('img', {
+        src: screenshotUrl,
+        alt: `${p.title} website preview`,
+        class: 'w-full h-full object-cover object-top absolute inset-0',
+        loading: 'lazy',
+      });
+      img.onerror = () => img.remove();
+      const placeholder = productMedia.querySelector('.snapshot-placeholder');
+      if (placeholder) placeholder.remove();
+      productMedia.insertBefore(img, productMedia.firstChild);
+    });
+  }
 
   const categoryBadge = el('span', { class: 'badge badge-sm ' + styles.badge, text: categoryLabel(p.category) });
   const titleEl = el('h3', { class: 'text-lg font-semibold leading-tight group-hover:text-primary transition-colors', text: p.title });
@@ -505,36 +662,67 @@ function buildProjectCard(p) {
   return card;
 }
 
-function renderProjects({ filter, query }) {
-  const grid = document.getElementById('projects-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-
+function renderProjects({ query }) {
   const q = (query || '').trim().toLowerCase();
-  const items = PROJECTS.filter((p) => {
-    if (filter && filter !== 'all' && p.category !== filter) return false;
+  const allItems = PROJECTS.filter((p) => {
     if (!q) return true;
     const hay = [p.title, p.whatItIs, p.problem, (p.tech || []).join(' '), (p.built || []).join(' ')].join(' ').toLowerCase();
     return hay.includes(q);
   });
 
-  if (items.length === 0) {
-    grid.appendChild(
-      el('div', { class: 'col-span-full rounded-2xl border border-dashed border-base-300 bg-base-200/50 p-8 text-center opacity-70' }, [
-        el('p', { class: 'text-sm', text: 'No projects match. Try a different search or filter.' }),
-      ]),
-    );
-    return;
-  }
+  const emptyMsg = el('div', { class: 'col-span-full rounded-2xl border border-dashed border-base-300 bg-base-200/50 p-8 text-center opacity-70' }, [
+    el('p', { class: 'text-sm', text: 'No projects match. Try a different search.' }),
+  ]);
 
-  // Featured first, then rest
-  const featured = items.filter((p) => p.featured);
-  const rest = items.filter((p) => !p.featured);
-  const ordered = [...featured, ...rest];
+  for (const [category, config] of Object.entries(SECTION_CONFIG)) {
+    const grid = document.getElementById(config.gridId);
+    if (!grid) continue;
+    grid.innerHTML = '';
 
-  for (const p of ordered) {
-    grid.appendChild(buildProjectCard(p));
+    const items = allItems.filter((p) => p.category === category);
+    const featured = items.filter((p) => p.featured);
+    const rest = items.filter((p) => !p.featured);
+    const ordered = [...featured, ...rest];
+
+    if (ordered.length === 0) {
+      grid.appendChild(emptyMsg.cloneNode(true));
+      continue;
+    }
+
+    for (const p of ordered) {
+      grid.appendChild(buildProjectCard(p));
+    }
   }
+}
+
+function setupProjectStepsScrollSpy() {
+  const stepsContainer = document.getElementById('project-steps');
+  const sections = document.querySelectorAll('[data-section]');
+  if (!stepsContainer || !sections.length) return;
+
+  stepsContainer.addEventListener('click', (e) => {
+    const step = e.target.closest('.step[data-scroll-to]');
+    if (!step) return;
+    const targetId = step.getAttribute('data-scroll-to');
+    const target = document.getElementById(targetId);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  const updateActive = () => {
+    const viewportTop = window.scrollY + 120;
+    let active = 'saas';
+    for (const s of sections) {
+      const rect = s.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      if (top <= viewportTop) active = s.getAttribute('data-section') || active;
+    }
+    stepsContainer.querySelectorAll('.step').forEach((step) => {
+      step.classList.toggle('step-primary', step.getAttribute('data-step') === active);
+    });
+  };
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
 }
 
 function setupNavigation() {
@@ -550,30 +738,12 @@ function setupNavigation() {
 
 function initProjectsPage() {
   const search = document.getElementById('project-search');
-  let filter = 'all';
-
-  document.querySelectorAll('button[data-filter]').forEach((b) => {
-    const active = (b.getAttribute('data-filter') || '') === 'all';
-    b.classList.toggle('btn-primary', active);
-    b.classList.toggle('btn-ghost', !active);
-  });
-
-  const render = () => renderProjects({ filter, query: search?.value || '' });
-
-  document.querySelectorAll('button[data-filter]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filter = btn.getAttribute('data-filter') || 'all';
-      document.querySelectorAll('button[data-filter]').forEach((b) => {
-        const active = (b.getAttribute('data-filter') || 'all') === filter;
-        b.classList.toggle('btn-primary', active);
-        b.classList.toggle('btn-ghost', !active);
-      });
-      render();
-    });
-  });
+  const render = () => renderProjects({ query: search?.value || '' });
 
   search?.addEventListener('input', render);
   render();
+
+  requestAnimationFrame(() => setupProjectStepsScrollSpy());
 }
 
 function setupGlobalSearchShortcut() {
