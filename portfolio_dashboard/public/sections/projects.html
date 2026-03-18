@@ -1,0 +1,25 @@
+<section id="projects" data-route-title="Projects" class="space-y-6">
+  <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <div>
+      <h2 class="text-2xl font-semibold">Projects</h2>
+      <p class="mt-1 text-sm opacity-70">Selected work across internal SaaS, client websites, and research. Click a card for details.</p>
+    </div>
+
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+      <label class="input input-bordered flex items-center gap-2">
+        <input id="project-search" type="text" class="grow" placeholder="Search projects, tech, impact…" />
+        <kbd class="kbd kbd-sm hidden sm:inline-flex">/</kbd>
+      </label>
+      <div class="join">
+        <button class="btn btn-sm join-item btn-primary" data-filter="all" type="button">All</button>
+        <button class="btn btn-sm join-item btn-ghost" data-filter="internal_saas" type="button">SaaS</button>
+        <button class="btn btn-sm join-item btn-ghost" data-filter="public_website" type="button">Web</button>
+        <button class="btn btn-sm join-item btn-ghost" data-filter="public_research" type="button">Research</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="projects-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Cards injected by renderProjects() -->
+  </div>
+</section>
