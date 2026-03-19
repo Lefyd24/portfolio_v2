@@ -1,6 +1,50 @@
 import { initHeroThreeBackground } from './three-bg.js'
 import { PORTFOLIO } from './data/portfolio.js'
 
+const getPageLang = () => {
+  if (typeof document === 'undefined') return 'en'
+  const lang = document.documentElement.getAttribute('lang') || document.documentElement.lang || ''
+  return lang.toLowerCase().startsWith('el') ? 'el' : 'en'
+}
+
+const I18N = {
+  en: {
+    projectType: { saas: 'SaaS / Internal', websites: 'Client website', research: 'Research' },
+    publication: 'Publication',
+    live: 'Live',
+    repo: 'Repo',
+    highlights: 'Highlights',
+    tech: 'Tech',
+    close: 'Close',
+    items: (n) => `${n} items`,
+    skillGroup: { backend: 'Backend', frontend: 'Frontend', databases: 'Databases', analytics: 'Analytics', devops: 'DevOps' },
+  },
+  el: {
+    projectType: { saas: 'SaaS / Εσωτερικό', websites: 'Ιστοσελίδα πελάτη', research: 'Έρευνα' },
+    publication: 'Δημοσίευση',
+    live: 'Ζωντανά',
+    repo: 'Repo',
+    highlights: 'Σημαντικά',
+    tech: 'Τεχνολογίες',
+    close: 'Κλείσιμο',
+    items: (n) => `${n} στοιχεία`,
+    skillGroup: { backend: 'Backend', frontend: 'Frontend', databases: 'Βάσεις δεδομένων', analytics: 'Αναλυτικά', devops: 'DevOps' },
+  },
+}
+
+const t = (key, subkey) => {
+  const lang = getPageLang()
+  const map = I18N[lang] || I18N.en
+  const val = subkey ? map[key]?.[subkey] : map[key]
+  return typeof val === 'function' ? val : val != null ? String(val) : ''
+}
+
+const getProjectLocale = (project) => {
+  const lang = getPageLang()
+  if (lang === 'el') return project.el || project.en
+  return project.en || project.el
+}
+
 const PROFILE = {
   links: {
     github: 'https://github.com/Lefyd24',
@@ -45,12 +89,15 @@ const initTheme = () => {
   setTheme(theme)
 
   const toggle = document.getElementById('theme-toggle')
-  if (!toggle) return
+  const speedDialTheme = document.getElementById('speed-dial-theme')
 
-  toggle.addEventListener('click', () => {
+  const handleThemeToggle = () => {
     const next = document.documentElement.classList.contains('dark') ? 'light' : 'dark'
     setTheme(next)
-  })
+  }
+
+  if (toggle) toggle.addEventListener('click', handleThemeToggle)
+  if (speedDialTheme) speedDialTheme.addEventListener('click', handleThemeToggle)
 }
 
 const getSkillIconId = (tag) => {
@@ -202,17 +249,15 @@ const el = (tag, attrs = {}, children = []) => {
 }
 
 const getProjectTypeLabel = (type) => {
-  if (type === 'saas') return 'SaaS / Internal'
-  if (type === 'websites') return 'Client website'
-  if (type === 'research') return 'Research'
-  return safe(type)
+  const label = t('projectType', type)
+  return label || safe(type)
 }
 
 const getProjectLinks = (project) => {
   const links = []
-  if (project.url) links.push({ label: 'Live', href: project.url })
-  if (project.repo && project.repoPublic) links.push({ label: 'Repo', href: project.repo })
-  if (project.publicationUrl) links.push({ label: 'Publication', href: project.publicationUrl })
+  if (project.url) links.push({ label: t('live'), href: project.url })
+  if (project.repo && project.repoPublic) links.push({ label: t('repo'), href: project.repo })
+  if (project.publicationUrl) links.push({ label: t('publication'), href: project.publicationUrl })
   return links
 }
 
@@ -257,7 +302,7 @@ const openProjectModal = (project) => {
   const modal = document.getElementById('project-modal')
   if (!modal) return
 
-  const p = project.en || project.el || {}
+  const p = getProjectLocale(project) || {}
   const title = safe(p.title)
   const summary = safe(p.summary)
   const description = safe(p.description)
@@ -342,7 +387,7 @@ const openProjectModal = (project) => {
 }
 
 const renderProjectCard = (project) => {
-  const p = project.en || project.el || {}
+  const p = getProjectLocale(project) || {}
   const title = safe(p.title)
   const summary = safe(p.summary)
   const tags = Array.isArray(p.tags) ? p.tags.slice(0, 6) : []
@@ -401,7 +446,7 @@ const renderProjectCard = (project) => {
                 el('div', { class: 'flex items-start justify-between gap-3' }, [
                   el('div', { class: 'flex items-center gap-2' }, [
                     el('div', { class: 'text-slate-700 dark:text-slate-100' }, [iconSvg('doc')]),
-                    el('div', { class: 'text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400', text: 'Publication' }),
+                    el('div', { class: 'text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400', text: t('publication') }),
                   ]),
                   el('div', { class: 'text-slate-500 dark:text-slate-400' }, [iconSvg('external')]),
                 ]),
@@ -475,24 +520,13 @@ const renderExperienceItem = (job) => {
 const renderSkillGroup = (group) => {
   const tags = Array.isArray(group.tags) ? group.tags : []
   const label = group.id ? group.id : 'Skills'
-
-  const labelText =
-    label === 'backend'
-      ? 'Backend'
-      : label === 'frontend'
-        ? 'Frontend'
-        : label === 'databases'
-          ? 'Databases'
-          : label === 'analytics'
-            ? 'Analytics'
-            : label === 'devops'
-              ? 'DevOps'
-              : String(label)
+  const labelText = t('skillGroup', label) || String(label)
+  const itemsText = typeof t('items') === 'function' ? t('items')(tags.length) : `${tags.length} items`
 
   return el('div', { class: 'reveal rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700' }, [
     el('div', { class: 'flex items-center justify-between gap-3' }, [
       el('h3', { class: 'text-sm font-semibold text-slate-900 dark:text-white', text: labelText }),
-      el('span', { class: 'text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400', text: `${tags.length} items` }),
+      el('span', { class: 'text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400', text: itemsText }),
     ]),
     el(
       'div',
@@ -616,12 +650,114 @@ const initModalDismiss = () => {
   })
 }
 
+const initSpeedDial = () => {
+  const trigger = document.getElementById('speed-dial-trigger')
+  const menu = document.getElementById('speed-dial-menu')
+  const iconMenu = document.getElementById('speed-dial-icon-menu')
+  const iconClose = document.getElementById('speed-dial-icon-close')
+  const items = document.querySelectorAll('.speed-dial-item')
+
+  if (!trigger || !menu) return
+
+  const open = () => {
+    menu.classList.remove('opacity-0', 'pointer-events-none', 'invisible')
+    menu.classList.add('opacity-100', 'pointer-events-auto', 'visible')
+    menu.setAttribute('data-open', '')
+    iconMenu?.classList.add('hidden')
+    iconClose?.classList.remove('hidden')
+    trigger?.setAttribute('aria-expanded', 'true')
+  }
+
+  const close = () => {
+    menu.classList.add('opacity-0', 'pointer-events-none', 'invisible')
+    menu.classList.remove('opacity-100', 'pointer-events-auto', 'visible')
+    menu.removeAttribute('data-open')
+    iconMenu?.classList.remove('hidden')
+    iconClose?.classList.add('hidden')
+    trigger?.setAttribute('aria-expanded', 'false')
+  }
+
+  const toggle = () => {
+    const isOpen = trigger?.getAttribute('aria-expanded') === 'true'
+    if (isOpen) close()
+    else open()
+  }
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation()
+    toggle()
+  })
+
+  items.forEach((item) => {
+    item.addEventListener('click', () => close())
+  })
+
+  const themeBtn = document.getElementById('speed-dial-theme')
+  if (themeBtn) {
+    themeBtn.addEventListener('click', (e) => {
+      e.stopPropagation()
+      close()
+    })
+  }
+
+  document.addEventListener('click', (e) => {
+    const dial = document.getElementById('speed-dial')
+    if (!dial?.contains(e.target)) close()
+  })
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close()
+  })
+}
+
+const initLangDropdown = () => {
+  const trigger = document.getElementById('lang-dropdown-trigger')
+  const menu = document.getElementById('lang-dropdown-menu')
+  const chevron = document.getElementById('lang-dropdown-chevron')
+  const container = document.getElementById('lang-dropdown')
+
+  if (!trigger || !menu || !container) return
+
+  const open = () => {
+    menu.setAttribute('data-open', '')
+    trigger.setAttribute('aria-expanded', 'true')
+    chevron?.classList.add('rotate-180')
+  }
+
+  const close = () => {
+    menu.removeAttribute('data-open')
+    trigger.setAttribute('aria-expanded', 'false')
+    chevron?.classList.remove('rotate-180')
+  }
+
+  const toggle = () => {
+    const isOpen = trigger.getAttribute('aria-expanded') === 'true'
+    if (isOpen) close()
+    else open()
+  }
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation()
+    toggle()
+  })
+
+  document.addEventListener('click', (e) => {
+    if (!container.contains(e.target)) close()
+  })
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close()
+  })
+}
+
 const boot = () => {
   initTheme()
   applyLinks()
   renderAll()
   initScrollAnimations()
   initModalDismiss()
+  initSpeedDial()
+  initLangDropdown()
 
   initHeroThreeBackground('hero-canvas')
 }

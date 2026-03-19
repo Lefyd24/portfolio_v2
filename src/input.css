@@ -56,5 +56,62 @@
       scroll-behavior: auto;
     }
   }
+
+  .speed-dial-menu {
+    contain: layout paint;
+    transition: opacity 0.08s ease-out;
+  }
+
+  .speed-dial-menu[data-open] {
+    @apply opacity-100 pointer-events-auto visible;
+  }
+
+  .speed-dial-menu .glass-card {
+    contain: layout paint;
+    backdrop-filter: blur(16px) saturate(1.2);
+  }
+
+  .speed-dial-menu .speed-dial-item {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  @keyframes speed-dial-item-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .speed-dial-menu[data-open] .speed-dial-item {
+    animation: speed-dial-item-in 0.25s ease-out forwards;
+  }
+
+  .speed-dial-menu[data-open] .speed-dial-item:nth-child(1) { animation-delay: 60ms; }
+  .speed-dial-menu[data-open] .speed-dial-item:nth-child(2) { animation-delay: 105ms; }
+  .speed-dial-menu[data-open] .speed-dial-item:nth-child(3) { animation-delay: 150ms; }
+  .speed-dial-menu[data-open] .speed-dial-item:nth-child(4) { animation-delay: 195ms; }
+  .speed-dial-menu[data-open] .speed-dial-item:nth-child(5) { animation-delay: 240ms; }
+  .speed-dial-menu[data-open] .speed-dial-item:nth-child(7) { animation-delay: 285ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .speed-dial-menu {
+      transition: none;
+    }
+
+    .speed-dial-menu .speed-dial-item {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+
+  .lang-dropdown-menu {
+    transition: opacity 0.15s ease-out;
+  }
+
+  .lang-dropdown-menu[data-open] {
+    @apply opacity-100 pointer-events-auto visible;
+  }
 }
 
