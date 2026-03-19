@@ -22,7 +22,7 @@ const I18N = {
   el: {
     projectType: { saas: 'SaaS / Εσωτερικό', websites: 'Ιστοσελίδα πελάτη', research: 'Έρευνα' },
     publication: 'Δημοσίευση',
-    live: 'Ζωντανά',
+    live: 'Online',
     repo: 'Repo',
     highlights: 'Σημαντικά',
     tech: 'Τεχνολογίες',
