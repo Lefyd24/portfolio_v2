@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Background gradient — deep navy -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#1a2748"/>
+      <stop offset="100%" stop-color="#0c1428"/>
+    </linearGradient>
+
+    <!-- Champagne/ivory gold — matches the dot in the favicon exactly -->
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#EDE8D0"/>
+      <stop offset="50%"  stop-color="#d9d4b9"/>
+      <stop offset="100%" stop-color="#9b967a"/>
+    </linearGradient>
+
+    <!-- Gold fade left-to-right for the rule line -->
+    <linearGradient id="goldfade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#EDE8D0"/>
+      <stop offset="60%"  stop-color="#d9d4b9"/>
+      <stop offset="100%" stop-color="#9b967a" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Vertical gold fade for divider -->
+    <linearGradient id="divider" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#EDE8D0" stop-opacity="0"/>
+      <stop offset="25%"  stop-color="#d9d4b9" stop-opacity="0.35"/>
+      <stop offset="75%"  stop-color="#d9d4b9" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#9b967a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ── Background ── -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Outer border frame — very subtle gold -->
+  <rect x="20" y="20" width="1160" height="590"
+        rx="16" fill="none"
+        stroke="url(#gold)" stroke-width="1" opacity="0.3"/>
+
+  <!-- ── LEFT: Monogram mark ── -->
+  <!-- Mark background card -->
+  <rect x="72" y="115" width="400" height="400"
+        rx="28" fill="#111e3a"/>
+  <!-- Mark border -->
+  <rect x="72" y="115" width="400" height="400"
+        rx="28" fill="none"
+        stroke="url(#gold)" stroke-width="1.2" opacity="0.4"/>
+
+  <!-- LF. scaled and translated into the mark box -->
+  <g transform="translate(72,115) scale(0.4)">
+    <!-- L -->
+    <path d="M277.375 304.95200000000006V316.2920000000001Q258.09700000000004 316.8590000000001 248.17450000000002 320.5445000000001Q238.25200000000004 324.2300000000001 234.85000000000002 334.15250000000003Q231.44800000000004 344.07500000000005 231.44800000000004 365.0540000000001V657.6260000000001Q231.44800000000004 672.9350000000001 233.71600000000004 680.5895Q235.98400000000004 688.244 242.22100000000003 690.7955Q248.45800000000003 693.347 260.365 693.347H279.076Q293.81800000000004 693.347 310.82800000000003 682.0070000000001Q327.838 670.667 343.99750000000006 650.8220000000001Q360.15700000000004 630.9770000000001 372.064 605.7455Q383.971 580.514 389.074 553.298H402.115Q400.41400000000004 573.71 400.41400000000004 605.462Q400.41400000000004 620.2040000000001 400.981 648.2705000000001Q401.548 676.337 404.38300000000004 706.388Q375.466 705.254 339.178 704.9705Q302.89000000000004 704.687 274.5400000000001 704.687H235.98400000000004Q212.17000000000004 704.687 184.67050000000006 704.9705Q157.17100000000005 705.254 129.10450000000006 705.5375Q101.03800000000005 705.821 76.09000000000006 706.388V695.048Q93.66700000000006 693.914 102.17200000000005 690.512Q110.67700000000005 687.11 113.51200000000006 676.904Q116.34700000000005 666.6980000000001 116.34700000000005 646.2860000000001V365.0540000000001Q116.34700000000005 344.07500000000005 113.51200000000006 334.15250000000003Q110.67700000000005 324.2300000000001 101.88850000000005 320.5445000000001Q93.10000000000005 316.8590000000001 76.09000000000006 316.2920000000001V304.95200000000006Q92.53300000000004 305.51900000000006 119.46550000000005 306.08600000000007Q146.39800000000005 306.6530000000001 177.01600000000005 306.6530000000001Q205.36600000000004 306.6530000000001 232.58200000000002 306.08600000000007Q259.798 305.51900000000006 277.375 304.95200000000006Z" fill="white"/>
+    <!-- F -->
+    <path d="M757.9849999999999 304.95200000000006Q755.717 333.3020000000001 754.8665 359.6675000000001Q754.016 386.0330000000001 754.016 400.2080000000001Q754.016 412.11500000000007 754.583 422.88800000000003Q755.15 433.66100000000006 755.717 441.03200000000004H742.6759999999999Q733.037 393.97100000000006 716.027 367.03850000000006Q699.017 340.10600000000005 678.8885 329.0495000000001Q658.76 317.99300000000005 638.348 317.99300000000005H630.977Q616.235 317.99300000000005 608.864 320.5445000000001Q601.4929999999999 323.09600000000006 598.9414999999999 330.4670000000001Q596.39 337.8380000000001 596.39 353.71400000000006V498.86600000000004H602.06Q617.9359999999999 498.86600000000004 630.977 492.062Q644.018 485.25800000000004 653.9404999999999 473.91800000000006Q663.8629999999999 462.5780000000001 670.3834999999999 449.53700000000003Q676.904 436.49600000000004 679.172 424.02200000000005H692.213Q689.9449999999999 456.34100000000007 690.2284999999999 473.35100000000006Q690.512 490.36100000000005 690.512 504.53600000000006Q690.512 518.711 691.079 535.721Q691.646 552.731 693.914 585.0500000000001H680.873Q677.471 564.071 666.9815 547.061Q656.492 530.051 640.049 520.1285Q623.606 510.206 602.06 510.206H596.39V640.616Q596.39 663.296 601.2094999999999 674.9195Q606.029 686.543 619.637 689.9449999999999Q633.245 693.347 659.327 693.347V706.388Q640.049 705.821 608.864 705.254Q577.679 704.687 542.525 704.687Q516.443 704.687 490.361 705.254Q464.279 705.821 441.032 706.388V695.048Q458.609 693.914 467.11400000000003 690.512Q475.619 687.11 478.454 676.904Q481.289 666.6980000000001 481.289 646.2860000000001V365.0540000000001Q481.289 344.07500000000005 478.454 334.15250000000003Q475.619 324.2300000000001 466.83050000000003 320.5445000000001Q458.04200000000003 316.8590000000001 441.032 316.2920000000001V304.95200000000006Q465.98 305.51900000000006 494.04650000000004 305.80250000000007Q522.113 306.08600000000007 549.6125 306.3695000000001Q577.112 306.6530000000001 600.9259999999999 306.6530000000001H639.482Q665.564 306.6530000000001 698.7335 306.3695000000001Q731.903 306.08600000000007 757.9849999999999 304.95200000000006Z" fill="white"/>
+    <!-- dot — champagne gold -->
+    <path d="M859.839 616.802Q886.488 616.802 901.23 628.9925000000001Q915.972 641.183 915.972 665.5640000000001Q915.972 689.945 901.23 702.1355000000001Q886.488 714.326 859.839 714.326Q832.623 714.326 818.1645000000001 702.1355000000001Q803.706 689.945 803.706 665.5640000000001Q803.706 641.183 818.1645000000001 628.9925000000001Q832.623 616.802 859.839 616.802Z" fill="url(#gold)"/>
+  </g>
+
+  <!-- ── Vertical divider ── -->
+  <line x1="520" y1="60" x2="520" y2="570"
+        stroke="url(#divider)" stroke-width="1"/>
+
+  <!-- ── RIGHT: Info panel ── -->
+  <!-- Eyebrow: URL / label -->
+  <text x="556" y="158"
+        fill="#9b967a"
+        font-family="'Courier New', Courier, monospace"
+        font-size="12" letter-spacing="3.5" opacity="0.8">FTHENOS.WORK</text>
+
+  <!-- Name — the hero text -->
+  <text x="554" y="255"
+        fill="#ffffff"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="68" font-weight="700"
+        letter-spacing="-1">Lefteris Fthenos</text>
+
+  <!-- Gold rule under name -->
+  <rect x="554" y="270" width="580" height="1.5" rx="1"
+        fill="url(#goldfade)" opacity="0.6"/>
+
+  <!-- Role / subtitle — italic champagne -->
+  <text x="556" y="316"
+        fill="#d9d4b9"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="20" font-style="italic">Full Stack Developer · Data Analytics · SaaS</text>
+
+  <!-- Stack line 1 -->
+  <text x="556" y="362"
+        fill="#6a7490"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="17">Enterprise software · Power BI · Django · FastAPI</text>
+
+  <!-- Stack line 2 -->
+  <text x="556" y="388"
+        fill="#6a7490"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="17">Heraklion, Crete · Available worldwide</text>
+
+  <!-- Thin rule before stats -->
+  <line x1="554" y1="422" x2="1140" y2="422"
+        stroke="#ffffff" stroke-width="0.5" opacity="0.07"/>
+
+  <!-- Stats row -->
+  <!-- 5+ years -->
+  <text x="554" y="478" fill="#ffffff"
+        font-family="Georgia, serif" font-size="42">5+</text>
+  <text x="554" y="504" fill="#3a4860"
+        font-family="'Courier New', monospace"
+        font-size="10.5" letter-spacing="2.5">YEARS CODING</text>
+
+  <line x1="652" y1="448" x2="652" y2="512"
+        stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+
+  <!-- 6 apps -->
+  <text x="668" y="478" fill="#ffffff"
+        font-family="Georgia, serif" font-size="42">6</text>
+  <text x="668" y="504" fill="#3a4860"
+        font-family="'Courier New', monospace"
+        font-size="10.5" letter-spacing="2.5">ENTERPRISE APPS</text>
+
+  <line x1="810" y1="448" x2="810" y2="512"
+        stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+
+  <!-- GPA -->
+  <text x="826" y="478" fill="#ffffff"
+        font-family="Georgia, serif" font-size="42">9.01</text>
+  <text x="826" y="504" fill="#3a4860"
+        font-family="'Courier New', monospace"
+        font-size="10.5" letter-spacing="2.5">MSC GPA · AUEB</text>
+
+  <line x1="976" y1="448" x2="976" y2="512"
+        stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+
+  <!-- 2 sites -->
+  <text x="992" y="478" fill="#ffffff"
+        font-family="Georgia, serif" font-size="42">2</text>
+  <text x="992" y="504" fill="#3a4860"
+        font-family="'Courier New', monospace"
+        font-size="10.5" letter-spacing="2.5">CLIENT SITES</text>
+
+  <!-- Available badge bottom-right -->
+  <rect x="992" y="556" width="148" height="28"
+        rx="14" fill="#111e3a"
+        stroke="url(#gold)" stroke-width="1"/>
+  <circle cx="1012" cy="570" r="4.5" fill="#3ecf6a"/>
+  <text x="1024" y="574.5"
+        fill="#d9d4b9"
+        font-family="'Courier New', monospace"
+        font-size="10.5" letter-spacing="2">AVAILABLE</text>
+
+  <!-- Left gold accent bar -->
+  <rect x="20" y="20" width="4" height="590"
+        rx="2" fill="url(#gold)" opacity="0.7"/>
+</svg>

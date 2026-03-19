@@ -12,7 +12,7 @@ A modern, petrol-themed portfolio with 3D effects, glassmorphism, and a rich UI.
 - **Bento grid** - Modern project layout with varied card sizes
 - **Project modals** - Click any project for detailed view (bilingual)
 - **GSAP ScrollTrigger** - Smooth scroll animations
-- **Dual CV downloads** - Developer and Business Analyst versions
+
 - **Responsive design** - Mobile-first, works on all devices
 
 ## Tech Stack
@@ -55,7 +55,7 @@ Requires [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/insta
 
 ---
 
-Static site – also deployable to GitHub Pages, Netlify, Vercel, or any static host. Ensure CV PDFs are included.
+Static site – also deployable to GitHub Pages, Netlify, Vercel, or any static host.
 
 ## Structure
 
@@ -67,8 +67,7 @@ Static site – also deployable to GitHub Pages, Netlify, Vercel, or any static 
 │   ├── i18n.js
 │   └── data/
 │       └── portfolio.js    ← Edit this to update skills, projects, experience
-├── English CV - 2025 - DEV.pdf
-├── English CV - 2025 - BA.pdf
+
 └── README.md
 ```
 

@@ -51,10 +51,7 @@ const PROFILE = {
     linkedin: 'https://www.linkedin.com/in/eleftherios-fthenos',
     email: 'mailto:fthenosyd@gmail.com',
   },
-  cv: {
-    dev: '../English CV - 2025 - DEV.pdf',
-    ba: '../English CV - 2025 - BA.pdf',
-  },
+
 }
 
 const byType = (projects, type) => projects.filter((p) => p.type === type)
@@ -571,10 +568,7 @@ const applyLinks = () => {
   setHref('contact-linkedin', PROFILE.links.linkedin)
   setHref('contact-github', PROFILE.links.github)
 
-  setHref('cv-dev', PROFILE.cv.dev)
-  setHref('cv-ba', PROFILE.cv.ba)
-  setHref('contact-cv-dev', PROFILE.cv.dev)
-  setHref('contact-cv-ba', PROFILE.cv.ba)
+
 }
 
 const renderAll = () => {
