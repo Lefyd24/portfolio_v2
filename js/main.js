@@ -259,7 +259,7 @@ const getProjectLinks = (project) => {
 }
 
 const projectLinkFrom = (project) => {
-  if (project.type === 'websites' && project.url) return { label: 'Live', href: project.url }
+  //if (project.type === 'websites' && project.url) return { label: 'Live', href: project.url }
   if (project.repo && project.repoPublic) return { label: 'Repo', href: project.repo }
   if (project.type === 'research' && project.repo && project.repoPublic) return { label: 'Repo', href: project.repo }
   return null
@@ -272,9 +272,35 @@ const linkIconFor = (label) => {
   return 'external'
 }
 
+const getLiveLink = (project) => {
+  if (!project?.url) return null
+  return { label: t('live'), href: project.url }
+}
+
+const renderLiveButton = (link, title) => {
+  const base =
+    'inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-navy-500/25'
+  const styles =
+    'bg-navy-500/10 text-navy-600 ring-1 ring-navy-400/30 hover:bg-navy-500/20 hover:text-navy-700 dark:bg-navy-500/20 dark:text-navy-400 dark:ring-navy-400/25 dark:hover:bg-navy-500/30'
+
+  return el(
+    'a',
+    {
+      class: `${base} ${styles}`,
+      href: link.href,
+      target: '_blank',
+      rel: 'noreferrer',
+      onClick: (e) => e.stopPropagation(),
+      onKeyDown: (e) => e.stopPropagation(),
+      'aria-label': `${link.label} link for ${title}`,
+    },
+    [iconSvg('external'), el('span', { text: link.label })],
+  )
+}
+
 const renderLinkButton = (link, title, variant = 'solid') => {
   const base =
-    'inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500/25'
+    'inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-navy-500/25'
   const styles =
     variant === 'ghost'
       ? 'bg-slate-50 text-slate-700 ring-1 ring-slate-200 hover:bg-white hover:text-slate-900 dark:bg-slate-800 dark:text-slate-100 dark:ring-slate-700 dark:hover:bg-slate-700'
@@ -326,7 +352,13 @@ const openProjectModal = (project) => {
   const headerLinks = document.getElementById('modal-header-links')
   if (headerLinks) {
     headerLinks.innerHTML = ''
-    links.slice(0, 3).forEach((l) => headerLinks.appendChild(renderLinkButton(l, title, 'ghost')))
+    const liveLink = getLiveLink(project)
+    links.slice(0, 3).forEach((l) => {
+      const btn = l.href === project?.url && liveLink
+        ? renderLiveButton(liveLink, title)
+        : renderLinkButton(l, title, 'ghost')
+      headerLinks.appendChild(btn)
+    })
   }
 
   const descNode = document.getElementById('modal-description')
@@ -390,14 +422,16 @@ const renderProjectCard = (project) => {
   const tags = Array.isArray(p.tags) ? p.tags.slice(0, 6) : []
   const link = projectLinkFrom(project)
   const links = getProjectLinks(project)
+  const liveLink = getLiveLink(project)
   const publicationUrl = safe(project.publicationUrl)
   const publicationPreviewText = safe(project.publicationPreviewText)
+  const otherLinks = links.filter((l) => l.href !== project.url)
 
   return el(
     'article',
     {
       class:
-        'reveal group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-teal-500/25 dark:bg-slate-900 dark:ring-slate-700',
+        'reveal group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-navy-500/25 dark:bg-slate-900 dark:ring-slate-700',
       role: 'button',
       tabIndex: 0,
       onClick: () => openProjectModal(project),
@@ -418,20 +452,23 @@ const renderProjectCard = (project) => {
               loading: 'lazy',
             })
             img.onerror = () => img.remove()
-            return el('div', { class: 'aspect-[16/9] bg-slate-50 dark:bg-slate-800' }, [img])
+            return el('div', { class: 'aspect-[2/1] max-h-42 overflow-hidden bg-slate-50 dark:bg-slate-800' }, [img])
           })()
         : null,
-      el('div', { class: 'p-5' }, [
-        el('div', { class: 'flex items-start justify-between gap-3' }, [
-          el('h4', { class: 'text-base font-semibold tracking-tight text-slate-900 dark:text-white', text: title || 'Project' }),
-          link ? renderLinkButton(link, title, 'ghost') : null,
+      el('div', { class: 'flex flex-1 flex-col p-5' }, [
+        el('div', { class: 'flex items-center justify-between gap-3' }, [
+          el('h4', { class: 'min-w-0 flex-1 text-base font-semibold tracking-tight text-slate-900 dark:text-white', text: title || 'Project' }),
+          el('div', { class: 'flex shrink-0 items-center gap-2' }, [
+            liveLink ? el('div', { class: 'pointer-events-auto' }, [renderLiveButton(liveLink, title)]) : null,
+            link ? renderLinkButton(link, title, 'ghost') : null,
+          ]),
         ]),
         publicationUrl
           ? el(
               'a',
               {
                 class:
-                  'mt-4 block rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200 hover:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/25 dark:bg-slate-800 dark:ring-slate-700 dark:hover:bg-slate-700',
+                  'mt-4 block rounded-2xl bg-slate-50 p-3 ring-1 ring-navy-400/40 hover:bg-white focus:outline-none focus:ring-2 focus:ring-navy-500/25 dark:bg-slate-800 dark:ring-navy-400/30 dark:hover:bg-slate-700',
                 href: publicationUrl,
                 target: '_blank',
                 rel: 'noreferrer',
@@ -459,11 +496,11 @@ const renderProjectCard = (project) => {
             )
           : null,
         el('p', { class: 'mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-200', text: summary }),
-        links.length
+        otherLinks.length
           ? el(
               'div',
               { class: 'mt-4 flex flex-wrap gap-2' },
-              links
+              otherLinks
                 .slice(0, 3)
                 .map((l) => el('div', { class: 'pointer-events-auto' }, [renderLinkButton(l, title, 'ghost')])),
             )
@@ -471,7 +508,7 @@ const renderProjectCard = (project) => {
         tags.length
           ? el(
               'div',
-              { class: 'mt-4 flex flex-wrap gap-2' },
+              { class: 'mt-auto flex flex-wrap gap-2 pt-4' },
               tags.map((t) =>
                 el('span', {
                   class:

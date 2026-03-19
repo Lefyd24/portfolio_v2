@@ -5,12 +5,11 @@
   "scripts": {
     "dev": "python3 -m http.server 4173 --directory .",
     "build": "npm run build:css",
-    "build:css": "tailwindcss -i ./src/input.css -o ./public/output.css --minify",
-    "watch:css": "tailwindcss -i ./src/input.css -o ./public/output.css --watch",
+    "build:css": "tailwind -i ./src/input.css -o ./public/output.css --minify",
+    "watch:css": "tailwind -i ./src/input.css -o ./public/output.css --watch",
     "deploy": "npm run build && npx wrangler pages deploy . --project-name=portfolio"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.1.13",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.10"

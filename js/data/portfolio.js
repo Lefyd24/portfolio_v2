@@ -226,7 +226,7 @@ export const PORTFOLIO = {
       url: 'https://karaviotislaw.gr/',
       repo: 'https://github.com/Lefyd24/Karaviotis',
       repoPublic: false,
-      image: 'https://s0.wp.com/mshots/v1/https://karaviotislaw.gr?w=1200',
+      image: 'https://s0.wp.com/mshots/v1/https://www.karaviotislaw.gr?w=1200',
       en: {
         title: 'George Karaviotis Law Firm',
         summary:
