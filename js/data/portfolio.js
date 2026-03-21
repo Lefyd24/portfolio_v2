@@ -29,7 +29,7 @@ export const PORTFOLIO = {
       company: 'Mitsis Group',
       bullets: [
         'Lead development of Python-based enterprise applications for financial process automation',
-        'Design and deploy Django/Flask web applications for cross-departmental workflow optimization',
+        'Design and deploy Django/FastAPI web applications for cross-departmental workflow optimization',
         'Architect SQL databases and data pipelines supporting business intelligence initiatives',
       ],
     },

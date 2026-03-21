@@ -28,7 +28,7 @@ const I18N = {
     tech: 'Τεχνολογίες',
     close: 'Κλείσιμο',
     items: (n) => `${n} στοιχεία`,
-    skillGroup: { backend: 'Backend', frontend: 'Frontend', databases: 'Βάσεις δεδομένων', analytics: 'Αναλυτικά', devops: 'DevOps' },
+    skillGroup: { backend: 'Backend', frontend: 'Frontend', databases: 'Βάσεις δεδομένων', analytics: 'Analytics', devops: 'DevOps' },
   },
 }
 
