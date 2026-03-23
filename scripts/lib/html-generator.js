@@ -75,7 +75,7 @@ const SHARE_ICON = {
     { fill: false },
   ),
   copy: shareIcon(
-    '<path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a3 3 0 01-3 3H6.75a3 3 0 01-3-3V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25h2.25A2.25 2.25 0 0121 10.5v10.5A2.25 2.25 0 0118.75 23H9a.75.75 0 01-.75-.75V19.5a2.25 2.25 0 012.25-2.25H16.5a.75.75 0 00.75-.75v-6a.75.75 0 00-.75-.75h-4.5A2.25 2.25 0 009 10.5V6a2.25 2.25 0 012.25-2.25H16.5z" />',
+    '<path d="M7.5 3H14.6C16.8402 3 17.9603 3 18.816 3.43597C19.5686 3.81947 20.1805 4.43139 20.564 5.18404C21 6.03969 21 7.15979 21 9.4V16.5M6.2 21H14.3C15.4201 21 15.9802 21 16.408 20.782C16.7843 20.5903 17.0903 20.2843 17.282 19.908C17.5 19.4802 17.5 18.9201 17.5 17.8V9.7C17.5 8.57989 17.5 8.01984 17.282 7.59202C17.0903 7.21569 16.7843 6.90973 16.408 6.71799C15.9802 6.5 15.4201 6.5 14.3 6.5H6.2C5.0799 6.5 4.51984 6.5 4.09202 6.71799C3.71569 6.90973 3.40973 7.21569 3.21799 7.59202C3 8.01984 3 8.57989 3 9.7V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.0799 21 6.2 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
     { fill: false },
   ),
 }
@@ -187,7 +187,7 @@ export const buildArticleHtml = async (opts) => {
   const emailSubject = encodeURIComponent(frontmatter.title)
   const emailBody = encodeURIComponent(`${frontmatter.title}\n\n${canonical}\n`)
   const shareBtn =
-    'glass-btn inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-700 transition-colors hover:bg-white/60 focus:outline-none focus:ring-2 focus:ring-navy-500/25 dark:text-slate-200 dark:hover:bg-slate-800/70'
+    'glass-btn inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-700 transition-colors hover:bg-navy-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-navy-500/25 dark:text-slate-200 dark:hover:bg-slate-800/70'
   const shareBlock = `<div class="rounded-2xl glass-card p-5">
       <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">${esc(ui.shareTitle)}</h2>
       <div class="mt-4 flex flex-wrap gap-2">
