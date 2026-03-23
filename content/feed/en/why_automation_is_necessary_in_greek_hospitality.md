@@ -73,7 +73,7 @@ Working across the Greek hospitality sector, here's what I've seen actually move
 
 **Predictive administrative tools.** Not just reactive reporting, but systems that flag issues before they become fires: cash timing mismatches, commission discrepancies, group deposit deadlines approaching.
 
-These tools don't replace seasonal workers. They **protect permanent staff from drowning** in the coordination overhead that seasonal volatility creates — and they externalize institutional knowledge so the operation survives when key people eventually leave.
+These tools don't replace employees. They **protect permanent staff from drowning** in the coordination overhead that seasonal volatility creates — and they externalize institutional knowledge so the operation survives when key people eventually leave.
 
 ## The real choice
 
@@ -94,8 +94,6 @@ Automation won't solve the seasonal worker shortage. That's a structural problem
 But automation **can** prevent the permanent administrative core from collapsing under the weight of that seasonal chaos. It can let a small team handle complex, multi-property operations. It can preserve institutional knowledge when key people leave. And it can help independent Greek operators compete with international chains that have deeper pockets and corporate infrastructure already in place.
 
 The seasonal workers are the visible crisis. But the administrative sustainability is the one that determines whether Greek hospitality groups survive the next five years.
-
-That's the work that matters.
 
 ---
 
