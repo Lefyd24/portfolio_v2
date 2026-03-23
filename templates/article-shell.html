@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{HTML_LANG}}">
+  <head>
+    <meta charset="UTF-8" />
+    <script>if(location.hostname==='fthenos.work'){location.replace('https://www.fthenos.work'+location.pathname+location.search+location.hash)}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#050B14" media="(prefers-color-scheme: dark)" />
+    <title>{{PAGE_TITLE}}</title>
+    <meta name="description" content="{{META_DESC}}" />
+    <meta name="robots" content="index, follow" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href="{{CANONICAL}}" />
+{{HREFLANG_BLOCK}}
+    <meta property="og:title" content="{{OG_TITLE}}" />
+    <meta property="og:description" content="{{OG_DESC}}" />
+    <meta property="og:url" content="{{OG_URL}}" />
+    <meta property="og:type" content="{{OG_TYPE}}" />
+    <meta property="og:locale" content="{{OG_LOCALE}}" />
+    <meta property="og:locale:alternate" content="{{OG_LOCALE_ALT}}" />
+    <meta property="og:image" content="{{OG_IMAGE}}" />
+    <meta name="twitter:card" content="{{TWITTER_CARD}}" />
+    <meta name="twitter:title" content="{{TWITTER_TITLE}}" />
+    <meta name="twitter:description" content="{{TWITTER_DESC}}" />
+    <meta name="twitter:image" content="{{TWITTER_IMAGE}}" />
+    <link rel="icon" href="/public/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/public/output.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script type="application/ld+json">{{JSON_LD}}</script>
+  </head>
+  <body class="font-sans bg-slate-50 text-slate-900 antialiased transition-colors duration-300 ease-in-out dark:bg-ink-950 dark:text-slate-100">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 rounded-lg bg-white px-3 py-2 text-sm font-semibold shadow ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700 dark:text-slate-100">{{SKIP_TEXT}}</a>
+    <div id="scroll-root" class="min-h-dvh scroll-smooth overscroll-contain transition-colors duration-300 ease-in-out" aria-label="{{SCROLL_ARIA}}">
+      <header class="pointer-events-none fixed inset-x-0 top-0 z-40 overflow-visible pt-[env(safe-area-inset-top)]">{{HEADER_INNER}}</header>
+      <main id="main" tabindex="-1" class="relative">{{MAIN_INNER}}</main>
+      <footer class="border-t border-slate-200/80 py-8 text-center text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
+        <p>© <span id="footer-year">{{FOOTER_YEAR}}</span> {{AUTHOR_NAME}} · {{FOOTER_RIGHTS}}</p>
+      </footer>
+    </div>
+    <script type="module" src="/js/feed-page.js"></script>
+  </body>
+</html>

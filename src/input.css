@@ -117,5 +117,46 @@
   .lang-dropdown-menu[data-open] {
     @apply opacity-100 pointer-events-auto visible;
   }
+
+  /* Feed: inline citation superscripts + Sources block (see markdown-parser citations) */
+  .article-body sup.citation-ref {
+    @apply ms-0.5 align-[0.12em] text-[0.72em] font-normal leading-none;
+  }
+
+  .article-body .citation-ref-link {
+    @apply font-semibold text-navy-600 no-underline decoration-slate-400/80 underline-offset-[2px] transition-colors hover:underline dark:text-sky-400;
+  }
+
+  .article-citations {
+    @apply mt-14 border-t border-slate-200/90 pt-10 dark:border-slate-700/80;
+  }
+
+  .article-citations .citations-heading {
+    @apply mb-6 text-sm font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400;
+  }
+
+  .article-citations .citation-list {
+    @apply m-0 flex list-none flex-col gap-5 p-0;
+  }
+
+  .article-citations .citation-item {
+    @apply m-0 scroll-mt-24 grid grid-cols-[minmax(0,1.75rem)_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-0.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:grid-cols-[2rem_minmax(0,1fr)_auto];
+  }
+
+  .article-citations .citation-marker {
+    @apply pt-0.5 text-right text-xs font-bold tabular-nums text-navy-700 dark:text-sky-400;
+  }
+
+  .article-citations .citation-body {
+    @apply min-w-0 [&_a]:break-words;
+  }
+
+  .article-citations .citation-body a {
+    @apply font-medium text-navy-600 underline decoration-slate-300 underline-offset-[3px] transition-colors hover:decoration-navy-500 dark:text-sky-400 dark:decoration-sky-500/40 dark:hover:decoration-sky-300;
+  }
+
+  .article-citations .citation-backref {
+    @apply inline-flex shrink-0 pt-0.5 text-sm font-medium text-slate-400 no-underline hover:text-navy-600 dark:text-slate-500 dark:hover:text-sky-400;
+  }
 }
 

@@ -6,17 +6,183 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/" />
     <xhtml:link rel="alternate" hreflang="el" href="https://www.fthenos.work/el/" />
-    <lastmod>2026-03-19</lastmod>
+    <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.fthenos.work/el/</loc>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/" />
     <xhtml:link rel="alternate" hreflang="el" href="https://www.fthenos.work/el/" />
-    <lastmod>2026-03-19</lastmod>
+    <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.fthenos.work/feed/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/feed/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/feed/" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://www.fthenos.work/el/feed/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.fthenos.work/el/feed/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/feed/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/feed/" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://www.fthenos.work/el/feed/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.fthenos.work/feed/why_automation_is_necessary_in_grk_hospitality/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/feed/why_automation_is_necessary_in_grk_hospitality/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/feed/why_automation_is_necessary_in_grk_hospitality/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.fthenos.work/feed/tags/hospitality/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/feed/tags/hospitality/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/feed/tags/hospitality/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.fthenos.work/feed/tags/greece/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/feed/tags/greece/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/feed/tags/greece/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.fthenos.work/feed/tags/automation/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/feed/tags/automation/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/feed/tags/automation/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.fthenos.work/feed/tags/business-process/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/feed/tags/business-process/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/feed/tags/business-process/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.fthenos.work/feed/tags/workforce/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/feed/tags/workforce/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/feed/tags/workforce/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.fthenos.work/feed/tags/administrative-efficiency/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.fthenos.work/feed/tags/administrative-efficiency/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.fthenos.work/feed/tags/administrative-efficiency/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://fthenos.work/el/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/el/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://fthenos.work/el/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/feed/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/feed/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/feed/" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://fthenos.work/el/feed/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/el/feed/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/feed/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/feed/" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://fthenos.work/el/feed/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/feed/why_automation_is_necessary_in_grk_hospitality/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/feed/why_automation_is_necessary_in_grk_hospitality/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/feed/why_automation_is_necessary_in_grk_hospitality/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/feed/tags/hospitality/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/feed/tags/hospitality/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/feed/tags/hospitality/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/feed/tags/greece/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/feed/tags/greece/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/feed/tags/greece/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/feed/tags/automation/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/feed/tags/automation/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/feed/tags/automation/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/feed/tags/business-process/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/feed/tags/business-process/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/feed/tags/business-process/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/feed/tags/workforce/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/feed/tags/workforce/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/feed/tags/workforce/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fthenos.work/feed/tags/administrative-efficiency/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fthenos.work/feed/tags/administrative-efficiency/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fthenos.work/feed/tags/administrative-efficiency/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

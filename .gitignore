@@ -1,3 +1,7 @@
 node_modules/
 .cursor/
 .vscode/
+
+# Generated feed pages (build with `npm run build:feed`)
+/feed/
+/el/feed/

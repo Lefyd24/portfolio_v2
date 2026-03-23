@@ -4,8 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "python3 -m http.server 4173 --directory .",
-    "build": "npm run build:css",
+    "build": "npm run build:feed && npm run build:css",
+    "build:feed": "node ./scripts/build-feed.js",
     "build:css": "tailwind -i ./src/input.css -o ./public/output.css --minify",
+    "watch:feed": "node ./scripts/watch-feed.js",
     "watch:css": "tailwind -i ./src/input.css -o ./public/output.css --watch",
     "deploy": "npm run build && npx wrangler pages deploy . --project-name=portfolio"
   },
@@ -13,6 +15,12 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.10"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "chokidar": "^5.0.0",
+    "glob": "^13.0.6",
+    "gray-matter": "^4.0.3",
+    "marked": "^17.0.5"
   }
 }
-
