@@ -94,16 +94,19 @@ const homePrefix = (locale) => (locale === 'el' ? '/el' : '')
  *   alternatePath: string | null
  *   related: { slug: string, title: string, date: string, readingMinutes: number }[]
  *   ogImageUrl: string
+ *   ogImageKnownSize?: boolean
  * }} opts
  */
 export const buildArticleHtml = async (opts) => {
-  const { locale, slug, frontmatter, bodyHtml, alternatePath, related, ogImageUrl } = opts
+  const { locale, slug, frontmatter, bodyHtml, alternatePath, related, ogImageUrl, ogImageKnownSize } = opts
   const ui = SITE.ui[locale]
   const base = SITE.baseUrl.replace(/\/$/, '')
   const feedPrefix = locale === 'el' ? '/el/feed' : '/feed'
   const canonicalPath = `${feedPrefix}/${slug}/`
   const canonical = `${base}${canonicalPath}`
-  const pageTitle = `${frontmatter.title} | ${SITE.author.name}`
+  const socialTitle = frontmatter.shareTitle || frontmatter.title
+  const pageTitle = `${socialTitle} | ${SITE.author.name}`
+  const ogSiteName = `${SITE.author.name} — ${ui.listTitle}`
 
   const hreflang = []
   hreflang.push(
@@ -182,22 +185,22 @@ export const buildArticleHtml = async (opts) => {
       </div>`
 
   const shareUrl = encodeURIComponent(canonical)
-  const shareTitle = encodeURIComponent(frontmatter.title)
-  const shareTextCombined = encodeURIComponent(`${frontmatter.title}\n${canonical}`)
-  const emailSubject = encodeURIComponent(frontmatter.title)
-  const emailBody = encodeURIComponent(`${frontmatter.title}\n\n${canonical}\n`)
+  const shareTitleEnc = encodeURIComponent(socialTitle)
+  const shareTextCombined = encodeURIComponent(`${socialTitle}\n${canonical}`)
+  const emailSubject = encodeURIComponent(socialTitle)
+  const emailBody = encodeURIComponent(`${socialTitle}\n\n${canonical}\n`)
   const shareBtn =
     'glass-btn inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-700 transition-colors hover:bg-navy-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-navy-500/25 dark:text-slate-200 dark:hover:bg-slate-800/70'
   const shareBlock = `<div class="rounded-2xl glass-card p-5">
       <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">${esc(ui.shareTitle)}</h2>
       <div class="mt-4 flex flex-wrap gap-2">
-        <a href="https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.twitterShare)}" aria-label="${esc(ui.twitterShare)}">${SHARE_ICON.x}</a>
+        <a href="https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitleEnc}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.twitterShare)}" aria-label="${esc(ui.twitterShare)}">${SHARE_ICON.x}</a>
         <a href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.linkedinShare)}" aria-label="${esc(ui.linkedinShare)}">${SHARE_ICON.linkedin}</a>
         <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.facebookShare)}" aria-label="${esc(ui.facebookShare)}">${SHARE_ICON.facebook}</a>
-        <a href="https://www.reddit.com/submit?url=${shareUrl}&title=${shareTitle}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.redditShare)}" aria-label="${esc(ui.redditShare)}">${SHARE_ICON.reddit}</a>
-        <a href="https://news.ycombinator.com/submitlink?u=${shareUrl}&t=${shareTitle}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.hackerNewsShare)}" aria-label="${esc(ui.hackerNewsShare)}">${SHARE_ICON.hackerNews}</a>
+        <a href="https://www.reddit.com/submit?url=${shareUrl}&title=${shareTitleEnc}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.redditShare)}" aria-label="${esc(ui.redditShare)}">${SHARE_ICON.reddit}</a>
+        <a href="https://news.ycombinator.com/submitlink?u=${shareUrl}&t=${shareTitleEnc}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.hackerNewsShare)}" aria-label="${esc(ui.hackerNewsShare)}">${SHARE_ICON.hackerNews}</a>
         <a href="https://bsky.app/intent/compose?text=${shareTextCombined}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.blueskyShare)}" aria-label="${esc(ui.blueskyShare)}">${SHARE_ICON.bluesky}</a>
-        <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTitle}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.telegramShare)}" aria-label="${esc(ui.telegramShare)}">${SHARE_ICON.telegram}</a>
+        <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTitleEnc}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.telegramShare)}" aria-label="${esc(ui.telegramShare)}">${SHARE_ICON.telegram}</a>
         <a href="https://wa.me/?text=${shareTextCombined}" class="${shareBtn}" target="_blank" rel="noreferrer noopener" title="${esc(ui.whatsAppShare)}" aria-label="${esc(ui.whatsAppShare)}">${SHARE_ICON.whatsapp}</a>
         <a href="mailto:?subject=${emailSubject}&body=${emailBody}" class="${shareBtn}" title="${esc(ui.emailShare)}" aria-label="${esc(ui.emailShare)}">${SHARE_ICON.mail}</a>
         <button type="button" class="${shareBtn} share-copy-link" data-copy-share-url="${esc(canonical)}" data-copy-done="${esc(ui.copyLinkDone)}" title="${esc(ui.copyLinkShare)}" aria-label="${esc(ui.copyLinkShare)}">${SHARE_ICON.copy}</button>
@@ -261,6 +264,12 @@ export const buildArticleHtml = async (opts) => {
     </div>
   </div>`
 
+  const ogDimsBlock =
+    ogImageKnownSize === true
+      ? `    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />`
+      : ''
+
   const tpl = await loadTemplate('article-shell.html')
   return apply(tpl, {
     HTML_LANG: locale === 'el' ? 'el' : 'en',
@@ -268,17 +277,21 @@ export const buildArticleHtml = async (opts) => {
     META_DESC: esc(frontmatter.description),
     CANONICAL: esc(canonical),
     HREFLANG_BLOCK: hreflang.join('\n'),
-    OG_TITLE: esc(frontmatter.title),
+    OG_SITE_NAME: esc(ogSiteName),
+    OG_TITLE: esc(socialTitle),
     OG_DESC: esc(frontmatter.description),
     OG_URL: esc(canonical),
     OG_IMAGE: esc(ogImageUrl || `${base}${SITE.author.image}`),
+    OG_IMAGE_DIMS: ogDimsBlock,
+    OG_IMAGE_ALT: esc(socialTitle),
     OG_TYPE: 'article',
     OG_LOCALE: locale === 'el' ? 'el_GR' : 'en_US',
     OG_LOCALE_ALT: locale === 'el' ? 'en_US' : 'el_GR',
     TWITTER_CARD: 'summary_large_image',
-    TWITTER_TITLE: esc(frontmatter.title),
+    TWITTER_TITLE: esc(socialTitle),
     TWITTER_DESC: esc(frontmatter.description),
     TWITTER_IMAGE: esc(ogImageUrl || `${base}${SITE.author.image}`),
+    TWITTER_IMAGE_ALT: esc(socialTitle),
     JSON_LD: jsonLdString(articleLd),
     SKIP_TEXT: esc(ui.skip),
     SCROLL_ARIA: esc(ui.scrollAria),

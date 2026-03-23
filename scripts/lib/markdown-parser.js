@@ -149,6 +149,9 @@ export const parseArticleMarkdown = async (raw, sourcePath) => {
       featured: Boolean(fm.featured),
       readingTime: readingMinutes,
       ogImage: typeof fm.ogImage === 'string' ? fm.ogImage : '',
+      /** Shorter social / Open Graph title; falls back to `title` in the generator when empty. */
+      shareTitle:
+        typeof fm.shareTitle === 'string' && fm.shareTitle.trim() !== '' ? fm.shareTitle.trim() : '',
       canonicalUrl: typeof fm.canonicalUrl === 'string' ? fm.canonicalUrl : '',
     },
     html,

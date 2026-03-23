@@ -6,6 +6,7 @@ import { parseArticleMarkdown, slugifyTag } from './lib/markdown-parser.js'
 import { buildArticleHtml, buildArticleListHtml, buildTagListHtml } from './lib/html-generator.js'
 import { writeSitemap } from './lib/sitemap-generator.js'
 import { SITE } from './lib/site-config.js'
+import { renderArticleOgPng } from './lib/article-og-image.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.join(__dirname, '..')
@@ -37,6 +38,46 @@ const copyOgImageIfAny = async (mdPath, ogImage, slug) => {
   await fs.copyFile(src, dest)
   const base = SITE.baseUrl.replace(/\/$/, '')
   return `${base}/feed/${slug}/images/${path.basename(src)}`
+}
+
+/**
+ * Custom `ogImage` in front matter wins; otherwise generates `og-{locale}.png` (1200×630).
+ * Files always live under `feed/{slug}/images/` (never `el/feed/...`): one asset folder per
+ * post; Greek HTML still points at `/feed/{slug}/images/og-el.png` so both locales share URLs.
+ *
+ * @param {{ slug: string, en: object | null, el: object | null }} row
+ * @param {'en'|'el'} locale
+ */
+const resolveArticleOg = async (row, locale) => {
+  const base = SITE.baseUrl.replace(/\/$/, '')
+  const p = row[locale]
+  if (!p) return { url: '', knownSize: false }
+
+  const mdPath = path.join(contentRoot, locale, `${row.slug}.md`)
+  const og = p.frontmatter.ogImage
+  if (og && typeof og === 'string' && og.startsWith('./')) {
+    const copied = await copyOgImageIfAny(mdPath, og, row.slug)
+    if (copied) return { url: copied, knownSize: false }
+  }
+
+  const outDir = path.join(rootDir, 'feed', row.slug, 'images')
+  await fs.mkdir(outDir, { recursive: true })
+  const outPath = path.join(outDir, `og-${locale}.png`)
+  const headline = p.frontmatter.shareTitle || p.frontmatter.title
+  try {
+    const png = await renderArticleOgPng({
+      locale,
+      title: headline,
+      description: p.frontmatter.description,
+      authorName: p.frontmatter.author,
+      dateIso: p.frontmatter.date,
+    })
+    await fs.writeFile(outPath, png)
+    return { url: `${base}/feed/${row.slug}/images/og-${locale}.png`, knownSize: true }
+  } catch (err) {
+    console.error(`[build-feed] OG PNG failed for ${row.slug} (${locale}):`, err)
+    return { url: '', knownSize: false }
+  }
 }
 
 const writeIfChanged = async (filePath, html) => {
@@ -117,23 +158,19 @@ const run = async () => {
   }
 
   const base = SITE.baseUrl.replace(/\/$/, '')
+  const defaultOg = `${base}${SITE.author.image}`
 
   for (const row of rows) {
-    let ogEn = ''
-    let ogEl = ''
-    const enPath = path.join(contentRoot, 'en', `${row.slug}.md`)
-    const elPath = path.join(contentRoot, 'el', `${row.slug}.md`)
-    if (row.en?.frontmatter.ogImage) {
-      ogEn = await copyOgImageIfAny(enPath, row.en.frontmatter.ogImage, row.slug)
-    }
-    if (row.el?.frontmatter.ogImage) {
-      ogEl = await copyOgImageIfAny(elPath, row.el.frontmatter.ogImage, row.slug)
-    }
-    if (!ogEn && ogEl) ogEn = ogEl
-    if (!ogEl && ogEn) ogEl = ogEn
+    let ogEn = row.en ? await resolveArticleOg(row, 'en') : { url: '', knownSize: false }
+    let ogEl = row.el ? await resolveArticleOg(row, 'el') : { url: '', knownSize: false }
+
+    if (row.en && !ogEn.url && ogEl.url) ogEn = { url: ogEl.url, knownSize: ogEl.knownSize }
+    if (row.el && !ogEl.url && ogEn.url) ogEl = { url: ogEn.url, knownSize: ogEn.knownSize }
+
+    if (row.en && !ogEn.url) ogEn = { url: defaultOg, knownSize: false }
+    if (row.el && !ogEl.url) ogEl = { url: defaultOg, knownSize: false }
 
     if (row.en) {
-      const ogImageUrl = ogEn || `${base}${SITE.author.image}`
       const altPath = row.el ? `/el/feed/${row.slug}/` : null
       const related = getRelated(row.slug, 'en', row, rows)
       const html = await buildArticleHtml({
@@ -143,13 +180,13 @@ const run = async () => {
         bodyHtml: row.en.html,
         alternatePath: altPath,
         related,
-        ogImageUrl,
+        ogImageUrl: ogEn.url,
+        ogImageKnownSize: ogEn.knownSize,
       })
       await writeIfChanged(path.join(rootDir, 'feed', row.slug, 'index.html'), html)
     }
 
     if (row.el) {
-      const ogImageUrl = ogEl || `${base}${SITE.author.image}`
       const altPath = row.en ? `/feed/${row.slug}/` : null
       const related = getRelated(row.slug, 'el', row, rows)
       const html = await buildArticleHtml({
@@ -159,7 +196,8 @@ const run = async () => {
         bodyHtml: row.el.html,
         alternatePath: altPath,
         related,
-        ogImageUrl,
+        ogImageUrl: ogEl.url,
+        ogImageKnownSize: ogEl.knownSize,
       })
       await writeIfChanged(path.join(rootDir, 'el', 'feed', row.slug, 'index.html'), html)
     }
