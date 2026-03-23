@@ -36,6 +36,10 @@ const esc = (s) =>
 
 const jsonLdString = (obj) => JSON.stringify(obj).replace(/</g, '\\u003c')
 
+/** Default site OG image (`/public/og-image.png`) is 1200×630; used for feed index, tag pages, and article pages with custom OG assets. */
+const DEFAULT_OG_IMAGE_DIMS = `    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />`
+
 /** Inline SVG for share row; uses currentColor for theme sync. */
 const shareIcon = (child, opts = {}) => {
   const { fill = true } = opts
@@ -391,6 +395,7 @@ export const buildArticleListHtml = async (opts) => {
 
   const pageTitle = `${ui.listTitle} | ${SITE.author.name}`
   const description = ui.listSubtitle
+  const ogSiteName = `${SITE.author.name} — ${ui.listTitle}`
 
   const tpl = await loadTemplate('article-shell.html')
   return apply(tpl, {
@@ -403,10 +408,13 @@ export const buildArticleListHtml = async (opts) => {
       `    <link rel="alternate" hreflang="${locale === 'el' ? 'en' : 'el'}" href="${esc(locale === 'el' ? `${base}/feed/` : `${base}/el/feed/`)}" />`,
       `    <link rel="alternate" hreflang="x-default" href="${esc(`${base}/feed/`)}" />`,
     ].join('\n'),
+    OG_SITE_NAME: esc(ogSiteName),
     OG_TITLE: esc(pageTitle),
     OG_DESC: esc(description),
     OG_URL: esc(canonical),
     OG_IMAGE: esc(`${base}${SITE.author.image}`),
+    OG_IMAGE_DIMS: DEFAULT_OG_IMAGE_DIMS,
+    OG_IMAGE_ALT: esc(pageTitle),
     OG_TYPE: 'website',
     OG_LOCALE: locale === 'el' ? 'el_GR' : 'en_US',
     OG_LOCALE_ALT: locale === 'el' ? 'en_US' : 'el_GR',
@@ -414,6 +422,7 @@ export const buildArticleListHtml = async (opts) => {
     TWITTER_TITLE: esc(pageTitle),
     TWITTER_DESC: esc(description),
     TWITTER_IMAGE: esc(`${base}${SITE.author.image}`),
+    TWITTER_IMAGE_ALT: esc(pageTitle),
     JSON_LD: jsonLdString({
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
@@ -478,6 +487,7 @@ export const buildTagListHtml = async (opts) => {
   </div>`
 
   const pageTitle = `${tagLabel} | ${ui.breadcrumbFeed} | ${SITE.author.name}`
+  const ogSiteName = `${SITE.author.name} — ${ui.listTitle}`
   const tpl = await loadTemplate('article-shell.html')
   return apply(tpl, {
     HTML_LANG: locale === 'el' ? 'el' : 'en',
@@ -485,10 +495,13 @@ export const buildTagListHtml = async (opts) => {
     META_DESC: esc(ui.tagPostsTagged(tagLabel)),
     CANONICAL: esc(canonical),
     HREFLANG_BLOCK: `    <link rel="alternate" hreflang="${locale === 'el' ? 'el' : 'en'}" href="${esc(canonical)}" />`,
+    OG_SITE_NAME: esc(ogSiteName),
     OG_TITLE: esc(pageTitle),
     OG_DESC: esc(ui.tagPostsTagged(tagLabel)),
     OG_URL: esc(canonical),
     OG_IMAGE: esc(`${base}${SITE.author.image}`),
+    OG_IMAGE_DIMS: DEFAULT_OG_IMAGE_DIMS,
+    OG_IMAGE_ALT: esc(pageTitle),
     OG_TYPE: 'website',
     OG_LOCALE: locale === 'el' ? 'el_GR' : 'en_US',
     OG_LOCALE_ALT: locale === 'el' ? 'en_US' : 'el_GR',
@@ -496,6 +509,7 @@ export const buildTagListHtml = async (opts) => {
     TWITTER_TITLE: esc(pageTitle),
     TWITTER_DESC: esc(ui.tagPostsTagged(tagLabel)),
     TWITTER_IMAGE: esc(`${base}${SITE.author.image}`),
+    TWITTER_IMAGE_ALT: esc(pageTitle),
     JSON_LD: jsonLdString({
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
